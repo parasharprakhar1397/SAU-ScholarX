@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Application Attachments &bull; Docket #{{ aid }} &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="institutional-breadcrumb">
+    <a href="{{ url_for('dashboard') }}">&larr; Return to Dashboard</a> &bull;
+    <span>Application Attachments &bull; Docket #{{ aid }}</span>
+</div>
+
+<div class="gazette-page-header">
+    <div class="gazette-badge">STATUTORY VERIFICATION REPOSITORY</div>
+    <h1 class="gazette-title">Verified Application Documents &bull; Docket #{{ aid }}</h1>
+    <p class="gazette-subtitle">
+        Prescribed Annexures, Marksheets, and Statutory Affidavits submitted for official committee evaluation.
+    </p>
+</div>
+
+<div class="card documents-container-card">
+    {% if docs %}
+        <div class="table-responsive">
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Attachment Classification</th>
+                        <th>Original Filename</th>
+                        <th>Upload Timestamp</th>
+                        <th style="text-align: right;">Official Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in docs %}
+                        <tr>
+                            <td>
+                                <span class="badge badge-category">{{ doc.kind }}</span>
+                            </td>
+                            <td>
+                                <div class="file-name-cell">
+                                    <span class="file-icon">📄</span>
+                                    <strong>{{ doc.original_name }}</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="date-tag">📅 {{ doc.uploaded_at[:16] }}</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <a href="{{ url_for('uploaded_file', filename=doc.filename) }}" class="btn btn-xs btn-primary" download>
+                                    ⬇️ Download Verified File
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state-card">
+            <div class="empty-icon">📁</div>
+            <h3>No External Attachments Found</h3>
+            <p>No supporting documentation was appended to this digital application docket.</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-sm">Return to Dashboard</a>
+        </div>
+    {% endif %}
+
+    <div class="documents-footer-nav" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{ url_for('application_slip', aid=aid) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+            🖨️ View Full Verification Dossier Slip
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">
+            Return to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

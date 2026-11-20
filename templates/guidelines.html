@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Statutory Regulations & Prescribed Annexures &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="institutional-breadcrumb">
+    <a href="{{ url_for('index') }}">🏛️ University Home</a> &bull;
+    <span>Statutory Regulations & Annexures</span>
+</div>
+
+<div class="gazette-page-header">
+    <div class="gazette-badge">OFFICIAL GAZETTE ORDINANCE</div>
+    <h1 class="gazette-title">Financial Aid Regulations & Verification Ordinances</h1>
+    <p class="gazette-subtitle">
+        Governing the Administration, Scrutiny, and Sanction of Fellowships, Scholarships, and Tuition Concessions at South Asian University &bull; Academic Year 2026–2027 &bull; Conversion at <strong>1 USD = ₹91.00 INR</strong>
+    </p>
+</div>
+
+<div class="guidelines-layout">
+    <aside class="guidelines-sidebar">
+        <div class="sidebar-nav-card">
+            <h4 class="sidebar-head">Ordinance Index</h4>
+            <ul class="sidebar-links">
+                <li><a href="#statutory-basis">1. Statutory Basis & Mandate</a></li>
+                <li><a href="#currency-policy">2. Currency & Exchange Rate Policy</a></li>
+                <li><a href="#categories">3. Classification of Schemes</a></li>
+                <li><a href="#saarc-quotas">4. SAARC Country Quotas</a></li>
+                <li><a href="#income-slabs">5. Income & 10-Point CGPA Matrix</a></li>
+                <li><a href="#annexures">6. Prescribed Statutory Annexures</a></li>
+                <li><a href="#appeals">7. Grievance & Appeal Redressal</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-contact-card">
+            <div class="sidebar-campus-thumb-wrap">
+                <img src="{{ url_for('static', filename='images/main-building-2.jpeg') }}" alt="SAU Administrative Block" class="sidebar-campus-thumb">
+            </div>
+            <h4>Financial Aid Directorate</h4>
+            <p><strong>Room 204, Administrative Block</strong><br>South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, India</p>
+            <p><strong>Admissions / Aid:</strong><br><a href="tel:+911135656600">+91 (11) 3565 6600</a></p>
+            <p><strong>General PBX:</strong><br><a href="tel:+911135656500">+91 (11) 3565 6500</a></p>
+            <p><strong>Email:</strong> <a href="mailto:financial-aid@sau.int">financial-aid@sau.int</a></p>
+        </div>
+    </aside>
+
+    <div class="guidelines-content">
+        <!-- Campus Statutory Banner -->
+        <div class="guidelines-campus-hero">
+            <img src="{{ url_for('static', filename='images/campus-garden-building.jpeg') }}" alt="SAU Academic Grounds" class="guidelines-hero-img">
+            <div class="guidelines-hero-overlay">
+                <span class="hero-campus-pill">SAU STATUTORY DIRECTIVE</span>
+                <h3>Mandate of the Directorate of Student Affairs</h3>
+                <p>Permanent Campus &bull; Gaushala Road, Maidan Garhi, New Delhi &bull; Locked Conversion: 1 USD = ₹91.00 INR</p>
+            </div>
+        </div>
+
+        <!-- Section 1 -->
+        <section class="ordinance-card" id="statutory-basis">
+            <div class="ordinance-badge">CLAUSE 1.0</div>
+            <h2 class="ordinance-title">Statutory Basis & Inter-Governmental Mandate</h2>
+            <div class="ordinance-body">
+                <p>
+                    South Asian University was established pursuant to the Inter-Governmental Agreement signed at the 14th SAARC Summit in New Delhi by the Heads of State/Government of Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, and Sri Lanka.
+                </p>
+                <p>
+                    Under Section 12 of the University Statute, the Standing Committee on Scholarships and Financial Assistance (SCSFA) is empowered to disburse fellowships, fee remissions, and emergency subsidies to enrolled students to foster equitable academic participation across all eight member nations.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Currency Policy -->
+        <section class="ordinance-card" id="currency-policy">
+            <div class="ordinance-badge">CLAUSE 2.0</div>
+            <h2 class="ordinance-title">Currency & Locked Exchange Rate Ordinance</h2>
+            <div class="ordinance-body">
+                <div class="currency-policy-box">
+                    <strong>Resolution of the SAU Finance Committee (FC/2026/03):</strong>
+                    <p class="mt-2">
+                        To protect international scholars from currency volatility during the academic session, all tuition fees, scholarships, research grants, and monthly maintenance stipends for Session 2026–2027 are pegged to the United States Dollar (USD) and locked at an official statutory exchange rate of <strong>₹91.00 INR per USD</strong>. Disbursals through Indian banking channels shall be calculated exclusively at this locked benchmark.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="ordinance-card" id="categories">
+            <div class="ordinance-badge">CLAUSE 3.0</div>
+            <h2 class="ordinance-title">Classification of Financial Assistance Schemes</h2>
+            <div class="ordinance-body">
+                <div class="scheme-tier-table-wrap">
+                    <table class="table ordinance-table">
+                        <thead>
+                            <tr>
+                                <th>Scheme Title</th>
+                                <th>Annual Grant (USD / Locked INR)</th>
+                                <th>Primary Eligibility Criteria</th>
+                                <th>Maximum Tenability</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>SAARC-India Silver Jubilee Scholarship (SJS)</strong></td>
+                                <td>
+                                    <strong>$4,200</strong><br>
+                                    <small class="text-gold font-semibold">₹3,82,200 INR (@ ₹91/USD)</small>
+                                </td>
+                                <td>Top 5% Entrance Rank &amp; CGPA &ge; 8.75/10.00</td>
+                                <td>Normal Degree Duration (2–4 Years)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>President's Doctoral Fellowship</strong></td>
+                                <td>
+                                    <strong>$4,800</strong><br>
+                                    <small class="text-gold font-semibold">₹4,36,800 INR (@ ₹91/USD)</small>
+                                </td>
+                                <td>Ph.D. Comprehensive Clearance &amp; CGPA &ge; 9.00/10.00</td>
+                                <td>Up to 4 Years (Annual Review)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Financial Support Scheme (FSS)</strong></td>
+                                <td>
+                                    <strong>$2,400</strong><br>
+                                    <small class="text-gold font-semibold">₹2,18,400 INR (@ ₹91/USD)</small>
+                                </td>
+                                <td>Household Income &lt; ₹3,18,500/yr &amp; CGPA &ge; 6.50/10.00</td>
+                                <td>Renewable Semester-wise</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Departmental Technical Research Grants</strong></td>
+                                <td>
+                                    <strong>$3,500</strong><br>
+                                    <small class="text-gold font-semibold">₹3,18,500 INR (@ ₹91/USD)</small>
+                                </td>
+                                <td>Approved Technical Proposal &amp; CGPA &ge; 8.20/10.00</td>
+                                <td>1 Academic Year</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Semester Merit Scholarship</strong></td>
+                                <td>
+                                    <strong>$1,800</strong><br>
+                                    <small class="text-gold font-semibold">₹1,63,800 INR (@ ₹91/USD)</small>
+                                </td>
+                                <td>Top 10% Decile in Preceding Semester (SGPA &ge; 8.50/10.00)</td>
+                                <td>1 Semester</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="ordinance-card" id="saarc-quotas">
+            <div class="ordinance-badge">CLAUSE 4.0</div>
+            <h2 class="ordinance-title">Regional Quota Norms for SAARC Member States</h2>
+            <div class="ordinance-body">
+                <p>
+                    In accordance with the decisions of the SAU Governing Board, scholarship distributions reflect the inter-governmental character of the university:
+                </p>
+                <div class="quota-pills-row">
+                    <span class="quota-pill">🇮🇳 India: 50% Statutory Cap</span>
+                    <span class="quota-pill">🇵🇰 Pakistan: 10% Quota</span>
+                    <span class="quota-pill">🇧🇩 Bangladesh: 10% Quota</span>
+                    <span class="quota-pill">🇳🇵 Nepal: 10% Quota</span>
+                    <span class="quota-pill">🇱🇰 Sri Lanka: 10% Quota</span>
+                    <span class="quota-pill">🇦🇫 Afghanistan: 4% Protected Quota</span>
+                    <span class="quota-pill">🇧🇹 Bhutan: 3% Protected Quota</span>
+                    <span class="quota-pill">🇲🇻 Maldives: 3% Protected Quota</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Income and 10-Point CGPA Matrix -->
+        <section class="ordinance-card" id="income-slabs">
+            <div class="ordinance-badge">CLAUSE 5.0</div>
+            <h2 class="ordinance-title">Income & 10.00 CGPA Evaluation Matrix</h2>
+            <div class="ordinance-body">
+                <p>
+                    All academic evaluations are computed strictly on the standard <strong>10.00 Cumulative Grade Point Average (CGPA)</strong> grading scale adopted across all university faculties:
+                </p>
+                <div class="scheme-tier-table-wrap">
+                    <table class="table ordinance-table">
+                        <thead>
+                            <tr>
+                                <th>Academic Distinction Tier</th>
+                                <th>CGPA Range (10.00 Scale)</th>
+                                <th>Qualifying Fellowship Slabs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Grade O (Outstanding / Top Decile)</strong></td>
+                                <td>9.00 – 10.00</td>
+                                <td>President's Fellowship / SJS Priority Sanction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grade A+ (First Class with Distinction)</strong></td>
+                                <td>8.20 – 8.99</td>
+                                <td>Departmental Technical Grants / Merit Waiver</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grade A (First Class Standing)</strong></td>
+                                <td>7.50 – 8.19</td>
+                                <td>Regional Quota Awards / FLS Fellowships</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grade B+ (Qualifying Threshold for Need Aid)</strong></td>
+                                <td>6.50 – 7.49</td>
+                                <td>Financial Support Scheme (FSS Need-cum-Means)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Annexures -->
+        <section class="ordinance-card" id="annexures">
+            <div class="ordinance-badge">STATUTORY ANNEXURES</div>
+            <h2 class="ordinance-title">Prescribed Verification Templates</h2>
+            
+            <!-- Annexure A Template -->
+            <div class="annexure-document-box">
+                <div class="annexure-box-header">
+                    <span class="ann-label">ANNEXURE - A</span>
+                    <strong>Affidavit for Need-Based Financial Assistance (FSS)</strong>
+                </div>
+                <div class="annexure-box-body">
+                    <p class="format-note"><em>(To be executed on Non-Judicial Stamp Paper and attested by First Class Magistrate / SDO / Upazila Nirbahi Officer / Chief District Officer)</em></p>
+                    <div class="legal-box-text">
+                        "I, _______________________________, Son/Daughter of _______________________________, citizen of _______________________, holding Passport / National Identity Card No. ________________________, residing at ______________________________________________________________________, do hereby solemnly affirm and state on oath that:
+                        <br><br>
+                        1. I am currently enrolled as a regular full-time student at South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, in the program _______________________________ under Roll No. ________________________, maintaining a CGPA of _________ on a 10.00 scale.
+                        <br>
+                        2. The gross annual household income of my family from all sources for the financial year 2025–2026 does not exceed USD 3,500 (approx. ₹3,18,500 INR at locked university rate ₹91/USD).
+                        <br>
+                        3. I have attached the original Income Certificate issued by the competent Revenue Authority.
+                        <br>
+                        4. I understand that if any statement made herein is found to be false, my scholarship shall be summarily canceled with retrospective recovery and immediate expulsion from SAU."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Annexure B Template -->
+            <div class="annexure-document-box mt-4">
+                <div class="annexure-box-header">
+                    <span class="ann-label">ANNEXURE - B</span>
+                    <strong>Certificate of Academic Bonafide & Attendance Continuity</strong>
+                </div>
+                <div class="annexure-box-body">
+                    <p class="format-note"><em>(To be issued on official Departmental Letterhead and endorsed by the Head of Department / Chairperson)</em></p>
+                    <div class="legal-box-text">
+                        "This is to certify that Mr./Ms. __________________________________________, Roll No. _________________________, is a bonafide student of the Department of __________________________________, Faculty of __________________________________. 
+                        <br><br>
+                        As per official biometric registers, the student has maintained ____________% attendance across all registered courses in the preceding semester, with a qualifying CGPA of _________ / 10.00. The student's academic progress is satisfactory, and there are no disciplinary or integrity proceedings pending against him/her."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7 -->
+        <section class="ordinance-card" id="appeals">
+            <div class="ordinance-badge">CLAUSE 7.0</div>
+            <h2 class="ordinance-title">Appeals & Grievance Redressal Mechanism</h2>
+            <div class="ordinance-body">
+                <p>
+                    Any applicant aggrieved by the provisional decision of the Scrutiny Committee may lodge an appeal addressed to the <strong>Chairperson, Standing Committee on Scholarships & Financial Aid</strong> within 7 calendar days of the publication of provisional lists. Appeals must be submitted through the Financial Aid Cell (Room 204, Administrative Block, Gaushala Road, Maidan Garhi, New Delhi – 110068) or via email at <a href="mailto:financial-aid@sau.int">financial-aid@sau.int</a>.
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

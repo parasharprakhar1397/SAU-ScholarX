@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+
+{% block title %}Student Academic Dossier &bull; South Asian University{% endblock %}
+
+{% block content %}
+<!-- Student Identity Dossier Header -->
+<div class="student-profile-masthead">
+    <div class="profile-masthead-inner">
+        <div class="student-photo-avatar-wrap">
+            <img src="{{ url_for('static', filename=(current_user|avatar)) }}" alt="{{ current_user }}" class="student-dossier-photo">
+            <span class="avatar-flag-pill">
+                {% if user_profile and user_profile.country == 'Nepal' %}🇳🇵
+                {% elif user_profile and user_profile.country == 'Bangladesh' %}🇧🇩
+                {% elif user_profile and user_profile.country == 'Bhutan' %}🇧🇹
+                {% elif user_profile and user_profile.country == 'Sri Lanka' %}🇱🇰
+                {% elif user_profile and user_profile.country == 'Maldives' %}🇲🇻
+                {% elif user_profile and user_profile.country == 'Afghanistan' %}🇦🇫
+                {% elif user_profile and user_profile.country == 'Pakistan' %}🇵🇰
+                {% else %}🇮🇳{% endif %}
+            </span>
+        </div>
+
+        <div class="profile-details-block">
+            <div class="profile-tag-strip">
+                <span class="badge badge-category">ENROLLED SCHOLAR</span>
+                <span class="badge badge-success">● REGISTRATION ACTIVE</span>
+                <span class="profile-country-tag">Nationality: <strong>{{ user_profile.country if user_profile else 'India' }}</strong></span>
+                <span class="currency-tag-pill">💱 Locked Rate: <strong>1 USD = ₹91.00 INR</strong></span>
+            </div>
+
+            <h1 class="student-full-name">{{ current_user }}</h1>
+            
+            <div class="student-metadata-grid">
+                <div class="meta-field">
+                    <span class="field-label">SAU Enrolment / Roll No:</span>
+                    <strong class="field-value">{{ user_profile.student_id if user_profile and user_profile.student_id else 'SAU/2024/CSE/019' }}</strong>
+                </div>
+                <div class="meta-field">
+                    <span class="field-label">Degree Program:</span>
+                    <strong class="field-value">{{ user_profile.program if user_profile and user_profile.program else 'Postgraduate Degree' }}</strong>
+                </div>
+                <div class="meta-field">
+                    <span class="field-label">Enrolled Faculty:</span>
+                    <strong class="field-value">{{ user_profile.faculty if user_profile and user_profile.faculty else 'Faculty of Mathematics & Computer Science' }}</strong>
+                </div>
+                <div class="meta-field">
+                    <span class="field-label">Cumulative Standing (CGPA):</span>
+                    <strong class="field-value text-gold">{{ "%.2f"|format(user_profile.gpa) if user_profile and user_profile.gpa else '9.12' }} / 10.00</strong>
+                </div>
+                <div class="meta-field">
+                    <span class="field-label">Campus Residence:</span>
+                    <strong class="field-value">{{ user_profile.hostel_resident if user_profile and user_profile.hostel_resident else 'Hostel Block A, Maidan Garhi Campus' }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-actions-aside">
+            <a href="{{ url_for('scholarships') }}" class="btn btn-primary btn-block">
+                <span>🔍 Search Open Schemes</span>
+            </a>
+            <a href="{{ url_for('guidelines') }}#annexures" class="btn btn-secondary btn-block">
+                <span>📑 Prescribed Annexures</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Financial Aid Tracking Summary Metrics -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-total">📋</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ counts.total or 0 }}</span>
+            <span class="stat-title">Dockets Submitted</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-active">⏳</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ counts.active or 0 }}</span>
+            <span class="stat-title">Under Scrutiny / Review</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-approved">🏛️</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ counts.approved or 0 }}</span>
+            <span class="stat-title">Sanctioned Fellowships</span>
+        </div>
+    </div>
+</div>
+
+<!-- Campus Residence & Financial Aid Disbursal Card -->
+<div class="campus-residence-card">
+    <div class="residence-img-col">
+        <img src="{{ url_for('static', filename='images/hostel-blocks.jpeg') }}" alt="Maidan Garhi Hostel Residence" class="residence-photo">
+        <span class="residence-badge">🏢 RESIDENTIAL CAMPUS ALLOTMENT</span>
+    </div>
+    <div class="residence-info-col">
+        <div class="residence-header">
+            <h4>Campus Accommodation & Living Stipend Entitlement</h4>
+            <span class="residence-status-pill">Active Allotment &bull; Session 2026–27</span>
+        </div>
+        <p class="residence-desc">
+            Scholar is enrolled as a full-time resident in <strong>{{ user_profile.hostel_resident if user_profile and user_profile.hostel_resident else 'Hostel Block A, Maidan Garhi Campus' }}</strong>.
+            Living allowances under the SAARC Silver Jubilee Scholarship (SJS) and President's Fellowships are credited directly with hostel room subsidies and mess concessions at the locked rate of <strong>₹91.00 INR per USD</strong>.
+        </p>
+        <div class="residence-facilities-strip">
+            <span>🛏️ Furnished Single/Twin Room</span>
+            <span>🍽️ Subsidized Dining Hall</span>
+            <span>📶 High-Speed Campus WiFi</span>
+            <span>🏥 24/7 Health Centre</span>
+            <span>🚌 Shuttle to Chhatarpur Metro</span>
+        </div>
+    </div>
+</div>
+
+<!-- Submitted Dockets Table -->
+<section class="section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Personal Financial Aid Dossier &bull; Conversion at ₹91/USD</span>
+            <h2 class="section-main-heading">My Scholarship Submissions & Scrutiny Status</h2>
+            <p class="section-sub-heading">Real-time status tracking from Faculty Scrutiny to Central Standing Committee (SCSFA) approval.</p>
+        </div>
+    </div>
+
+    {% if apps %}
+        <div class="table-responsive">
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th>Docket Ref No & Title</th>
+                        <th>Award Value (USD / INR)</th>
+                        <th>Filing Date</th>
+                        <th>Procedural Status</th>
+                        <th>Committee Remarks & Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in apps %}
+                        <tr>
+                            <td>
+                                <div class="docket-ref-code">{{ a.application_no or 'SAU-SCH-2026-' ~ a.id }}</div>
+                                <strong class="app-title">{{ a.title }}</strong>
+                                <span class="badge badge-category">{{ a.category }}</span>
+                            </td>
+                            <td>
+                                <div><strong class="text-gold">${{ "%.2f"|format(a.requested_amount or a.amount) }}</strong></div>
+                                <div class="inr-sub-val font-semibold">{{ (a.requested_amount or a.amount)|inr }} INR</div>
+                                <small class="text-muted">Ordinance Max: ${{ "%.2f"|format(a.amount) }} ({{ a.amount|inr }})</small>
+                            </td>
+                            <td>
+                                <span class="date-tag">📅 {{ a.submitted_at[:10] }}</span>
+                            </td>
+                            <td>
+                                {% if a.status == 'Approved' %}
+                                    <span class="badge badge-success">✓ Sanction Approved</span>
+                                    <div class="status-sub-note">Fee Remission Sanctioned</div>
+                                {% elif a.status == 'Rejected' %}
+                                    <span class="badge badge-danger">✕ Not Recommended</span>
+                                    <div class="status-sub-note">Declined by Committee</div>
+                                {% elif a.status == 'Needs Information' %}
+                                    <span class="badge badge-warning">⚠️ Rectification Required</span>
+                                    <div class="status-sub-note">Action Needed from Student</div>
+                                {% elif a.status == 'Under Review' %}
+                                    <span class="badge badge-info">🔄 Faculty Scrutiny Active</span>
+                                    <div class="status-sub-note">Under Department Review</div>
+                                {% else %}
+                                    <span class="badge badge-neutral">📥 Docket Filed</span>
+                                    <div class="status-sub-note">Awaiting Verification</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-cell">
+                                    {% if a.staff_notes %}
+                                        <div class="staff-feedback-bubble">
+                                            <strong>SCSFA Minute:</strong> {{ a.staff_notes }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="docket-button-group">
+                                        <a href="{{ url_for('application_slip', aid=a.id) }}" class="btn btn-xs btn-outline-primary" target="_blank">
+                                            🖨️ Verification Slip
+                                        </a>
+                                        <a href="{{ url_for('documents', aid=a.id) }}" class="btn btn-xs btn-outline">
+                                            📎 Attachments
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state-card">
+            <div class="empty-icon">📁</div>
+            <h3>No Application Dockets Lodged</h3>
+            <p>You have not submitted any scholarship or fellowship applications for the current academic session. Review the available ordinances below to initiate an application.</p>
+            <a href="{{ url_for('scholarships') }}" class="btn btn-primary btn-sm">Explore Scholarship Ordinances</a>
+        </div>
+    {% endif %}
+</section>
+
+<!-- Open Scholarships Section -->
+<section class="section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Session 2026–2027</span>
+            <h2 class="section-main-heading">Recommended Open Schemes for Your Profile</h2>
+            <p class="section-sub-heading">Ordinances matching your faculty and academic level on the 10.00 CGPA scale.</p>
+        </div>
+        <a href="{{ url_for('scholarships') }}" class="official-text-link">View All Catalog Schemes &rarr;</a>
+    </div>
+
+    <div class="univ-card-grid">
+        {% for s in scholarships %}
+            <article class="univ-scheme-card">
+                <div class="scheme-card-header">
+                    <span class="scheme-category-badge">{{ s.category }}</span>
+                    <span class="scheme-status-badge status-open">● Active</span>
+                </div>
+                <h3 class="scheme-title">{{ s.title }}</h3>
+                <p class="scheme-description">{{ s.description }}</p>
+                <div class="scheme-data-sheet">
+                    <div class="data-row">
+                        <span class="data-label">Grant Value:</span>
+                        <div class="text-right">
+                            <strong class="data-val text-gold">${{ "%.2f"|format(s.amount) }}</strong>
+                            <div class="inr-sub-val"><strong>{{ s.amount|inr }} INR</strong> <small class="text-muted">(@ ₹91/USD)</small></div>
+                        </div>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Cutoff Date:</span>
+                        <span class="data-val date-highlight">📅 {{ s.deadline }}</span>
+                    </div>
+                </div>
+                <div class="scheme-footer-action">
+                    <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-sm btn-outline-primary btn-block">
+                        Inspect Requirements & Apply &rarr;
+                    </a>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

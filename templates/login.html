@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Central Authentication Service (SSO) &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card-split">
+        <div class="auth-photo-side">
+            <img src="{{ url_for('static', filename='images/main-building.jpeg') }}" alt="SAU Permanent Campus" class="auth-side-photo">
+            <div class="auth-photo-overlay">
+                <span class="auth-campus-tag">SOUTH ASIAN UNIVERSITY</span>
+                <h3>Directorate of Student Affairs</h3>
+                <p>Permanent Campus &bull; Maidan Garhi, New Delhi – 110068</p>
+                <div class="auth-side-flags">
+                    <span>🇦🇫</span> <span>🇧🇩</span> <span>🇧🇹</span> <span>🇮🇳</span> <span>🇲🇻</span> <span>🇳🇵</span> <span>🇵🇰</span> <span>🇱🇰</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-masthead-crest">
+                <div class="crest-mini-wrap">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="SAU Logo" class="auth-crest-img">
+                </div>
+                <span class="auth-crest-label">SOUTH ASIAN UNIVERSITY</span>
+                <h1 class="auth-title">Central Authentication Service</h1>
+                <p class="auth-subtitle">Single Sign-On (SSO) &bull; Directorate of Student Affairs & Financial Aid</p>
+            </div>
+
+        <form method="POST" action="{{ url_for('login') }}" class="auth-form" id="loginForm">
+            <div class="form-group">
+                <label for="email" class="form-label">Institutional University Email</label>
+                <div class="input-with-icon">
+                    <span class="field-icon">📧</span>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="username@university.edu or @sau.ac.in" required autofocus>
+                </div>
+                <small class="form-help">Enter your assigned institutional email identifier.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password / Secret Key</label>
+                <div class="input-with-icon">
+                    <span class="field-icon">🔒</span>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your portal password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-gold btn-block btn-lg">
+                <span>🔐 Authenticate & Enter Portal</span>
+            </button>
+        </form>
+
+        <div class="auth-security-notice">
+            <span class="security-shield">🛡️</span>
+            <div>
+                <strong>SAU Security Advisory:</strong> This is an official institutional system governed by the South Asian University IT Ordinances. Unauthorized access is subject to disciplinary action and statutory penalties.
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <p>New Student at SAU? <a href="{{ url_for('register') }}" class="auth-link">Register Student Financial Aid Profile &rarr;</a></p>
+        </div>
+
+        <!-- Fast Demonstration Sandbox Quick-fill -->
+        <div class="demo-quickfill">
+            <div class="demo-quickfill-title">⚡ Fast Evaluation Login Selector:</div>
+            <div class="demo-buttons">
+                <button type="button" class="btn btn-xs btn-outline" onclick="fillLogin('student@university.edu', 'Student123!')">Scholar (India)</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="fillLogin('pooja.shrestha@sau.ac.in', 'Student123!')">Scholar (Nepal)</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="fillLogin('reviewer@university.edu', 'Reviewer123!')">Faculty Reviewer</button>
+                <button type="button" class="btn btn-xs btn-outline" onclick="fillLogin('admin@university.edu', 'Admin123!')">Directorate Dean</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function fillLogin(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+}
+</script>
+{% endblock %}

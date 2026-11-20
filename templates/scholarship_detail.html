@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}{{ s.title }} &bull; Official Ordinance &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="institutional-breadcrumb">
+    <a href="{{ url_for('index') }}">🏛️ University Home</a> &bull;
+    <a href="{{ url_for('scholarships') }}">Scholarship Ordinances</a> &bull;
+    <span>{{ s.title }}</span>
+</div>
+
+<div class="detail-layout">
+    <div class="detail-main">
+        <div class="detail-header-card">
+            <div class="card-top">
+                <span class="scheme-category-badge">{{ s.category }}</span>
+                {% if s.status == 'Open' %}
+                    <span class="scheme-status-badge status-open">● Active for Application (Session 2026–27)</span>
+                {% else %}
+                    <span class="scheme-status-badge status-closed">● Ordinance Closed</span>
+                {% endif %}
+            </div>
+
+            <h1 class="detail-title">{{ s.title }}</h1>
+            <p class="detail-lead">{{ s.description }}</p>
+
+            <div class="detail-highlights">
+                <div class="highlight-box">
+                    <span class="hl-label">Ordinance Sanction</span>
+                    <strong class="hl-val text-gold">${{ "%.2f"|format(s.amount) }}</strong>
+                    <div class="inr-sub-val"><strong>{{ s.amount|inr }} INR</strong></div>
+                    <small class="text-muted">Per Annum (@ ₹91/USD)</small>
+                </div>
+                <div class="highlight-box">
+                    <span class="hl-label">Verification Deadline</span>
+                    <strong class="hl-val date-highlight">📅 {{ s.deadline }}</strong>
+                    <small class="text-muted">Cutoff at 23:59 IST</small>
+                </div>
+                <div class="highlight-box">
+                    <span class="hl-label">Statutory Status</span>
+                    <strong class="hl-val">{{ s.status }}</strong>
+                    <small class="text-muted">Gazetted Ordinance</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section-card">
+            <h2 class="sub-heading">I. Statutory Eligibility Criteria (10.00 CGPA Scale)</h2>
+            <div class="content-box">
+                <p>{{ s.eligibility }}</p>
+            </div>
+
+            <h2 class="sub-heading mt-4">II. Prescribed Verification Attachments & Annexures</h2>
+            <div class="content-box">
+                <p>{{ s.requirements }}</p>
+                <div class="attachment-guidance-note">
+                    <strong>Mandatory Guidelines:</strong> Files must be uploaded in PDF, PNG, JPG/JPEG, or DOC/DOCX format (Maximum 16MB per docket). Ensure all national affidavits and previous degree marksheets are clearly legible. Certified English translations required for non-English credentials.
+                </div>
+            </div>
+
+            <h2 class="sub-heading mt-4">III. Governing Regulation & Disbursal</h2>
+            <div class="content-box">
+                <p>
+                    Administered under the authority of the <strong>Standing Committee on Scholarships & Financial Aid (SCSFA)</strong>, South Asian University. Sanctions are disbursed through the Finance Office in two equal semester installments at the locked university rate of <strong>₹91.00 INR per USD</strong>, subject to satisfactory academic progress (minimum attendance 75% and preservation of the qualifying 10-point CGPA).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Form Sidebar -->
+    <div class="detail-sidebar">
+        {% if role == 'student' %}
+            {% if applied %}
+                <div class="card application-status-card">
+                    <div class="status-icon-wrap">🏛️</div>
+                    <h3>Application Docket Lodged</h3>
+                    <p>Your official application for this ordinance scheme is on file with the Directorate of Student Affairs.</p>
+                    <div class="docket-status-info">
+                        <strong>Docket Ref:</strong> <code>{{ applied.application_no or 'SAU-SCH-2026-' ~ applied.id }}</code><br>
+                        <strong>Sanction:</strong> <span class="text-gold font-bold">${{ "%.2f"|format(applied.requested_amount or s.amount) }} ({{ (applied.requested_amount or s.amount)|inr }})</span><br>
+                        <strong>Status:</strong> <span class="badge badge-info">{{ applied.status }}</span>
+                    </div>
+                    <div class="docket-status-actions" style="margin-top: 16px;">
+                        <a href="{{ url_for('application_slip', aid=applied.id) }}" target="_blank" class="btn btn-outline-primary btn-block">
+                            🖨️ Print Verification Dossier Slip
+                        </a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-block mt-2">
+                            Return to Student Dashboard
+                        </a>
+                    </div>
+                </div>
+            {% elif s.status == 'Open' %}
+                <div class="card application-form-card">
+                    <div class="app-form-header">
+                        <span class="official-tag">APPLICATION DOCKET</span>
+                        <h3>Lodge Scholarship Docket</h3>
+                        <p class="text-muted">Complete the fields below to initiate your formal evaluation by the Faculty Scrutiny Committee.</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('apply', sid=s.id) }}" enctype="multipart/form-data" class="app-submit-form">
+                        <div class="form-group">
+                            <label for="requested_amount" class="form-label">Requested Assistance Amount (USD $)</label>
+                            <input type="number" step="50" min="50" max="{{ s.amount }}" id="requested_amount" name="requested_amount" value="{{ s.amount }}" class="form-control" required>
+                            <small class="form-help">Max: ${{ "%.2f"|format(s.amount) }} ({{ s.amount|inr }} INR at locked rate ₹91/USD).</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="essay" class="form-label">Statement of Purpose & Need Justification *</label>
+                            <textarea id="essay" name="essay" rows="6" class="form-control" placeholder="Articulate your academic achievements on the 10-point scale, proposed research/study objectives, and financial need rationale. Refer to relevant achievements, publications, or economic circumstances..." required></textarea>
+                            <small class="form-help">Evaluated directly by the Faculty Scrutiny Committee.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="document_kind" class="form-label">Primary Attachment Classification</label>
+                            <select id="document_kind" name="document_kind" class="form-control">
+                                <option value="Academic Marksheet / Transcript">Official Academic Marksheet / Transcript</option>
+                                <option value="Annexure-A Income Affidavit">Annexure-A (Family Income Certificate Affidavit)</option>
+                                <option value="Annexure-B Bonafide & Attendance">Annexure-B (HoD Bonafide & Attendance Certificate)</option>
+                                <option value="Annexure-C Research Synopsis">Annexure-C (Research Synopsis Endorsement)</option>
+                                <option value="Passport / National Identity Document">SAARC Member State Passport / National ID</option>
+                                <option value="Supporting Recommendation Letter" selected>Supporting Recommendation Letter</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="documents" class="form-label">Upload Prescribed Verification Files</label>
+                            <input type="file" id="documents" name="documents" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" class="form-control-file">
+                            <small class="form-help">You can select multiple files (Transcripts, Affidavits, IDs). Max 16MB per docket.</small>
+                        </div>
+
+                        <div class="form-group affirm-box">
+                            <label class="checkbox-container">
+                                <input type="checkbox" required>
+                                <span class="affirm-text">
+                                    I certify that the particulars furnished, including my 10.00 scale CGPA and attachments, are authentic. False representation shall incur summary rejection and disciplinary action under SAU Ordinances.
+                                </span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-gold btn-block btn-lg">
+                            <span>Lodge Application Docket &rarr;</span>
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="card closed-banner-card">
+                    <div class="status-icon-wrap">🔒</div>
+                    <h3>Ordinance Closed</h3>
+                    <p>The verification window for this scholarship scheme has concluded for Academic Session 2026–2027.</p>
+                    <a href="{{ url_for('scholarships') }}" class="btn btn-outline btn-block">Inspect Other Open Schemes</a>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="card staff-preview-card">
+                <span class="staff-badge">SCSFA COMMITTEE MODE</span>
+                <h3>Reviewer View</h3>
+                <p>You are viewing this ordinance from an administrative or committee evaluation perspective. Enrolled students use this interface to submit applications.</p>
+                <div class="staff-preview-meta">
+                    <div class="meta-row">
+                        <span>Promulgated:</span>
+                        <strong>{{ s.created_at[:10] }}</strong>
+                    </div>
+                    <div class="meta-row">
+                        <span>INR Equivalence:</span>
+                        <strong>{{ s.amount|inr }}</strong>
+                    </div>
+                    <div class="meta-row">
+                        <span>Conversion Base:</span>
+                        <strong>₹91.00 / USD</strong>
+                    </div>
+                </div>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-block mt-3">Return to Scrutiny Workspace</a>
+            </div>
+        {% endif %}
+
+        <!-- Campus Facilities & Fellowship Benefits Box -->
+        <div class="card campus-benefit-card">
+            <div class="benefit-img-header">
+                {% if 'Silver Jubilee' in s.title or 'Merit' in s.title %}
+                    <img src="{{ url_for('static', filename='images/main-building.jpeg') }}" alt="Academic Block" class="benefit-img">
+                    <span class="benefit-tag">ACADEMIC & RESEARCH COMPLEX</span>
+                {% elif 'Need' in s.title or 'Financial Support' in s.title or 'Fellowship' in s.title %}
+                    <img src="{{ url_for('static', filename='images/hostel-blocks.jpeg') }}" alt="Hostel Residence" class="benefit-img">
+                    <span class="benefit-tag">CAMPUS HOSTEL & STIPEND</span>
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/campus-garden-building.jpeg') }}" alt="Campus Corridors" class="benefit-img">
+                    <span class="benefit-tag">PERMANENT CAMPUS</span>
+                {% endif %}
+            </div>
+            <div class="benefit-body">
+                <h4>Administered at Maidan Garhi Campus</h4>
+                <p>Awards under this scheme are governed by the SCSFA Standing Committee. Recipients enjoy access to central computational labs, subscribed international journals, and subsidized university dining at the locked rate of ₹91/USD.</p>
+                <div class="benefit-chips">
+                    <span>🏛️ SAU Senate Approved</span>
+                    <span>💱 Locked ₹91/USD</span>
+                    <span>📑 10.00 Scale CGPA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

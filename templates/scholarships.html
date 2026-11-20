@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Official Scholarship Ordinances & Schemes Catalog &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="institutional-breadcrumb">
+    <a href="{{ url_for('index') }}">🏛️ University Home</a> &bull;
+    <span>Scholarship Ordinances</span>
+</div>
+
+<div class="gazette-page-header">
+    <div class="gazette-badge">UNIVERSITY REGISTER</div>
+    <h1 class="gazette-title">Official Scholarship & Fellowship Schemes</h1>
+    <p class="gazette-subtitle">
+        Statutory Financial Aid Programs, Inter-Governmental Grants, and Departmental Research Fellowships &bull; Session 2026–2027 &bull; Locked Conversion Rate: <strong>1 USD = ₹91.00 INR</strong>
+    </p>
+</div>
+
+<!-- Campus Registry Advisory Banner -->
+<div class="schemes-campus-advisory">
+    <div class="advisory-photo-wrap">
+        <img src="{{ url_for('static', filename='images/campus-drone.jpeg') }}" alt="SAU Maidan Garhi Campus" class="advisory-photo">
+    </div>
+    <div class="advisory-text">
+        <span class="advisory-badge">INSTITUTIONAL DIRECTIVE &bull; SCSFA</span>
+        <h3>Statutory Inter-Governmental Scholarships (Session 2026–2027)</h3>
+        <p>All enrolled students across the 8 SAARC Member States are eligible to apply. Awards provide tuition fee exemptions, living allowances, and research subsidies calculated at the locked statutory exchange rate of <strong>₹91.00 INR per USD</strong> on a <strong>10.00 CGPA scale</strong>.</p>
+    </div>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="filter-card">
+    <form method="GET" action="{{ url_for('scholarships') }}" class="filter-form">
+        <div class="filter-group-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" name="q" value="{{ q }}" class="form-control filter-input" placeholder="Search by scheme title, keywords, research topic, or eligibility terms...">
+        </div>
+
+        <div class="filter-group-select">
+            <select name="category" class="form-control">
+                <option value="">All Classification Categories</option>
+                {% for c in categories %}
+                    <option value="{{ c.category }}" {% if category == c.category %}selected{% endif %}>{{ c.category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn btn-primary">Filter Catalog</button>
+            {% if q or category %}
+                <a href="{{ url_for('scholarships') }}" class="btn btn-outline">Reset Filters</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Results Meta -->
+<div class="results-meta-strip">
+    <span>Showing <strong>{{ scholarships|length }}</strong> Official Ordinance Scheme{{ 's' if scholarships|length != 1 else '' }} in Registry</span>
+    <span class="meta-note">All awards administered in accordance with SAU Financial Aid Regulations Clause 4(b) at ₹91/USD.</span>
+</div>
+
+<!-- Schemes Grid -->
+<div class="univ-card-grid">
+    {% for s in scholarships %}
+        <article class="univ-scheme-card">
+            <div class="scheme-thumbnail-bar">
+                {% if 'Silver Jubilee' in s.title or 'Merit' in s.title %}
+                    <img src="{{ url_for('static', filename='images/main-building.jpeg') }}" alt="Merit Scheme" class="scheme-bar-thumb">
+                {% elif 'Need' in s.title or 'Financial Support' in s.title %}
+                    <img src="{{ url_for('static', filename='images/hostel-blocks.jpeg') }}" alt="Residential Scheme" class="scheme-bar-thumb">
+                {% elif 'Biotech' in s.title or 'Research' in s.title or 'Doctoral' in s.title %}
+                    <img src="{{ url_for('static', filename='images/campus-garden-building.jpeg') }}" alt="Research Scheme" class="scheme-bar-thumb">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/campus-drone.jpeg') }}" alt="Departmental Scheme" class="scheme-bar-thumb">
+                {% endif %}
+                <div class="scheme-card-header-overlay">
+                    <span class="scheme-category-badge">{{ s.category }}</span>
+                    {% if s.status == 'Open' %}
+                        <span class="scheme-status-badge status-open">● Active Admissions</span>
+                    {% else %}
+                        <span class="scheme-status-badge status-closed">● Scheme Archived</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3 class="scheme-title">{{ s.title }}</h3>
+            <p class="scheme-description">{{ s.description }}</p>
+
+            <div class="scheme-data-sheet">
+                <div class="data-row">
+                    <span class="data-label">Ordinance Award Value:</span>
+                    <div class="text-right">
+                        <strong class="data-val text-gold">${{ "%.2f"|format(s.amount) }}</strong>
+                        <div class="inr-sub-val"><strong>{{ s.amount|inr }} INR</strong> <small class="text-muted">(@ ₹91/USD)</small></div>
+                    </div>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Verification Cutoff:</span>
+                    <span class="data-val date-highlight">📅 {{ s.deadline }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Eligibility Norms:</span>
+                    <span class="data-val text-muted-2">{{ s.eligibility }}</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Prescribed Materials:</span>
+                    <span class="data-val text-muted-2">{{ s.requirements }}</span>
+                </div>
+            </div>
+
+            <div class="scheme-footer-action">
+                {% if role == 'student' %}
+                    {% if s.applied %}
+                        <div class="applied-strip">
+                            <span class="badge badge-success">✓ Application Docket Lodged</span>
+                            <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-sm btn-outline">Inspect Docket Details</a>
+                        </div>
+                    {% elif s.status == 'Open' %}
+                        <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-sm btn-gold btn-block">Apply for this Ordinance &rarr;</a>
+                    {% else %}
+                        <button class="btn btn-sm btn-outline btn-block" disabled>Scheme Closed for Session</button>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-sm btn-outline-primary btn-block">Inspect Ordinance Specifications &rarr;</a>
+                {% endif %}
+            </div>
+        </article>
+    {% else %}
+        <div class="empty-state-card full-width">
+            <div class="empty-icon">🔎</div>
+            <h3>No Scholarship Ordinances Found</h3>
+            <p>No schemes matched your search or category filter. Try clearing the filter parameters to view the complete catalog.</p>
+            <a href="{{ url_for('scholarships') }}" class="btn btn-outline btn-sm">Clear Active Filters</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

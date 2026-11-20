@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+
+{% block title %}ScholarX &bull; Financial Aid & Scholarship Directorate &bull; South Asian University{% endblock %}
+
+{% block content %}
+<!-- President & Inter-Governmental Welcome Banner -->
+<section class="univ-hero-banner">
+    <div class="hero-crest-watermark">
+        <svg viewBox="0 0 100 100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5">
+            <circle cx="50" cy="50" r="45" />
+            <circle cx="50" cy="50" r="30" />
+            <path d="M50 48 Q35 40 26 44 L26 62 Q36 58 50 64 Q64 58 74 62 L74 44 Q65 40 50 48 Z" />
+        </svg>
+    </div>
+
+    <div class="hero-split-grid">
+        <div class="hero-inner-container">
+            <div class="hero-diplomatic-label">
+                <span class="diplomatic-seal">🏛️</span>
+                <span>Directorate of Student Affairs & Standing Committee on Scholarships (SCSFA)</span>
+            </div>
+            <h2 class="hero-headline">Institutional Financial Aid & Scholarship Portal</h2>
+            <p class="hero-strapline">
+                South Asian University administers comprehensive financial assistance, merit fellowships, and regional quota scholarships under the inter-governmental mandate of the eight SAARC Member States. Supporting extraordinary scholars across South Asia to pursue advanced learning without cross-border financial constraints.
+            </p>
+
+            <!-- Locked Currency Advisory Banner -->
+            <div class="hero-currency-pill">
+                <span class="rate-icon">💱</span>
+                <span><strong>University Currency Policy (2026–27):</strong> Stipends and tuition waivers are calculated at the locked conversion rate of <strong>₹91.00 INR per USD</strong> established at the commencement of the academic session. All academic standing evaluations are computed on a standard <strong>10.00 CGPA scale</strong>.</span>
+            </div>
+
+            <div class="hero-cta-strip">
+                <a href="{{ url_for('register') }}" class="btn btn-gold btn-lg">
+                    <span>📝 Apply for Academic Session 2026–27</span>
+                </a>
+                <a href="{{ url_for('scholarships') }}" class="btn btn-univ-outline btn-lg">
+                    <span>📜 Browse Approved Scholarship Schemes</span>
+                </a>
+                <a href="{{ url_for('guidelines') }}" class="btn btn-univ-subtle btn-lg">
+                    <span>📑 Download Ordinances & Annexures</span>
+                </a>
+            </div>
+
+            <div class="hero-metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-val">8</span>
+                    <span class="metric-label">SAARC Member States Represented</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-val">100%</span>
+                    <span class="metric-label">Fee Waivers for SJS & Top Merit Tiers</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-val">10.00</span>
+                    <span class="metric-label">Standard Academic CGPA Grading Scale</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-val">₹91.00</span>
+                    <span class="metric-label">Locked INR/USD Rate (Session 2026–27)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Campus Spotlight Frame -->
+        <div class="hero-spotlight-frame">
+            <div class="campus-spotlight-card">
+                <div class="spotlight-img-wrap">
+                    <img src="{{ url_for('static', filename='images/main-building.jpeg') }}" alt="South Asian University Permanent Campus - Maidan Garhi" class="spotlight-img">
+                    <span class="spotlight-tag">📍 MAIDAN GARHI CAMPUS</span>
+                </div>
+                <div class="spotlight-body">
+                    <div class="spotlight-title">Permanent Academic Complex & Central Library</div>
+                    <p class="spotlight-caption">Architectural landmark featuring the iconic terracotta mural, high-performance computing labs, and seminar complexes accommodating scholars from across South Asia.</p>
+                    <div class="spotlight-badges">
+                        <span class="badge-mini">🏛️ SAARC Inter-Gov Treaty</span>
+                        <span class="badge-mini">🌳 100-Acre Campus</span>
+                        <span class="badge-mini">🏢 100% Residential Hostels</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dean's Welcome & Institutional Notice -->
+<section class="section deans-message-section">
+    <div class="deans-message-box">
+        <div class="deans-crest-stamp">
+            <div class="official-stamp-circle">
+                <span>SAU</span>
+                <small>NEW DELHI</small>
+                <strong>SCSFA</strong>
+            </div>
+        </div>
+        <div class="deans-content">
+            <h3 class="box-heading">Mandate of the Directorate</h3>
+            <p class="box-text">
+                "In terms of Section 12 of the South Asian University Act and the Financial Aid Ordinances approved by the Governing Board, no student admitted to the university from any of the eight SAARC nations shall be denied higher education solely on grounds of financial insufficiency. All scholarships, fellowships, and tuition waivers are adjudicated strictly through an objective merit-cum-means matrix on a 10.00 CGPA scale, with awards disbursed in USD or Indian Rupees at the locked rate of ₹91/USD."
+            </p>
+            <div class="deans-signoff">
+                <strong>Office of the Dean, Student Affairs & Chairperson, SCSFA</strong><br>
+                <span>South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, India &bull; Phone: +91 (11) 3565 6600</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Active Scholarship Schemes for Current Session -->
+<section class="section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Session 2026–2027 Gazette &bull; Locked Conversion Rate: 1 USD = ₹91.00 INR</span>
+            <h2 class="section-main-heading">Featured Scholarship & Fellowship Schemes</h2>
+            <p class="section-sub-heading">Ordinance-approved financial assistance schemes currently open for institutional applications.</p>
+        </div>
+        <div class="header-action-wrap">
+            <a href="{{ url_for('scholarships') }}" class="official-text-link">View Full Ordinance Catalog &rarr;</a>
+        </div>
+    </div>
+
+    <div class="univ-card-grid">
+        {% for s in scholarships %}
+            <article class="univ-scheme-card">
+                <div class="scheme-card-header">
+                    <span class="scheme-category-badge">{{ s.category }}</span>
+                    <span class="scheme-status-badge status-open">● Active Scheme</span>
+                </div>
+
+                <h3 class="scheme-title">{{ s.title }}</h3>
+                <p class="scheme-description">{{ s.description }}</p>
+
+                <div class="scheme-data-sheet">
+                    <div class="data-row">
+                        <span class="data-label">Ordinance Value:</span>
+                        <div class="text-right">
+                            <strong class="data-val text-gold">${{ "%.2f"|format(s.amount) }}</strong>
+                            <div class="inr-sub-val"><strong>{{ s.amount|inr }} INR</strong> <small class="text-muted">(@ ₹91/USD)</small></div>
+                        </div>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Verification Cutoff:</span>
+                        <span class="data-val date-highlight">📅 {{ s.deadline }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Eligibility Norms:</span>
+                        <span class="data-val text-muted-2">{{ s.eligibility }}</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label">Prescribed Materials:</span>
+                        <span class="data-val text-muted-2">{{ s.requirements }}</span>
+                    </div>
+                </div>
+
+                <div class="scheme-footer-action">
+                    <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-primary btn-block">
+                        Inspect Ordinance & Lodge Application &rarr;
+                    </a>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Permanent Campus & Infrastructure Showcase -->
+<section class="section campus-showcase-section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Permanent Campus &bull; Gaushala Road, Maidan Garhi, New Delhi</span>
+            <h2 class="section-main-heading">World-Class Infrastructure & Campus Environment</h2>
+            <p class="section-sub-heading">A dedicated 100-acre academic sanctuary designed to empower collaborative education and advanced scientific discovery across South Asia.</p>
+        </div>
+        <div class="header-action-wrap">
+            <a href="{{ url_for('guidelines') }}#statutory-basis" class="official-text-link">Explore Campus Ordinances &rarr;</a>
+        </div>
+    </div>
+
+    <div class="campus-gallery-grid">
+        <article class="campus-photo-card">
+            <div class="photo-img-wrap">
+                <img src="{{ url_for('static', filename='images/main-building.jpeg') }}" alt="SAU Academic Complex" class="campus-card-img">
+                <span class="photo-tag">ACADEMIC COMPLEX</span>
+            </div>
+            <div class="photo-card-body">
+                <h4>Main Academic Complex & Central Library</h4>
+                <p>Features iconic terracotta murals, state-of-the-art computational labs, smart lecture complexes, and central archives serving all 7 faculties.</p>
+                <div class="photo-card-meta">
+                    <span>📍 Main Academic Block</span>
+                    <span>🏛️ Faculty of CS & Maths</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="campus-photo-card">
+            <div class="photo-img-wrap">
+                <img src="{{ url_for('static', filename='images/hostel-blocks.jpeg') }}" alt="SAU Student Hostel Residences" class="campus-card-img">
+                <span class="photo-tag">RESIDENTIAL HOSTELS</span>
+            </div>
+            <div class="photo-card-body">
+                <h4>International Scholar Residences</h4>
+                <p>Fully furnished, air-conditioned on-campus hostel blocks accommodating scholars from all 8 SAARC nations with multi-cuisine dining facilities.</p>
+                <div class="photo-card-meta">
+                    <span>🏢 Blocks A & B</span>
+                    <span>💱 Subsidized Living Grant</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="campus-photo-card">
+            <div class="photo-img-wrap">
+                <img src="{{ url_for('static', filename='images/campus-drone.jpeg') }}" alt="Aerial View of SAU Campus" class="campus-card-img">
+                <span class="photo-tag">100-ACRE CAMPUS</span>
+            </div>
+            <div class="photo-card-body">
+                <h4>Central Amphitheater & Green Campus</h4>
+                <p>High-altitude vista showing the master-planned circular amphitheater, landscaped courtyards, sports complexes, and diplomatic pavilions.</p>
+                <div class="photo-card-meta">
+                    <span>🌳 Eco-Friendly Masterplan</span>
+                    <span>🌐 Diplomatic Hub</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="campus-photo-card">
+            <div class="photo-img-wrap">
+                <img src="{{ url_for('static', filename='images/campus-garden-building.jpeg') }}" alt="SAU Campus Gardens" class="campus-card-img">
+                <span class="photo-tag">RESEARCH ENVIRONMENT</span>
+            </div>
+            <div class="photo-card-body">
+                <h4>Research Corridors & Landscaped Lawns</h4>
+                <p>Serene academic courtyards fostering cross-border student collaboration, seminar dialogues, and high-impact biotechnology research.</p>
+                <div class="photo-card-meta">
+                    <span>🔬 Life Sciences Annex</span>
+                    <span>☕ Central Plaza</span>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- Step-by-Step Institutional Adjudication Workflow -->
+<section class="section adjudication-process-section">
+    <div class="institutional-section-header centered">
+        <span class="section-sup-label">Procedural Workflow</span>
+        <h2 class="section-main-heading">Official 5-Tier Scrutiny & Sanction Process</h2>
+        <p class="section-sub-heading">Adjudication timeline governed by the SAU Standing Committee on Scholarships & Financial Aid (SCSFA).</p>
+    </div>
+
+    <div class="process-steps-track">
+        <div class="track-step">
+            <div class="step-badge">Stage 01</div>
+            <h4 class="step-head">Online Application</h4>
+            <p class="step-body">Student registers with SAU Roll Number and submits CGPA on a 10.00 scale with prescribed Annexure affidavits.</p>
+        </div>
+        <div class="track-step">
+            <div class="step-badge">Stage 02</div>
+            <h4 class="step-head">Faculty Scrutiny</h4>
+            <p class="step-body">Departmental Scrutiny Committee verifies entrance rankings, SGPA/CGPA marksheets, and 75% minimum attendance.</p>
+        </div>
+        <div class="track-step">
+            <div class="step-badge">Stage 03</div>
+            <h4 class="step-head">Revenue Verification</h4>
+            <p class="step-body">For need-based schemes (FSS), income certificates from competent national revenue authorities are validated.</p>
+        </div>
+        <div class="track-step">
+            <div class="step-badge">Stage 04</div>
+            <h4 class="step-head">SCSFA Committee Board</h4>
+            <p class="step-body">The Central Standing Committee reviews composite merit-need scores and recommends sanction quota lists.</p>
+        </div>
+        <div class="track-step">
+            <div class="step-badge">Stage 05</div>
+            <h4 class="step-head">Sanction & Disbursal</h4>
+            <p class="step-body">Official Gazette notification published; fee waiver credited and monthly stipends disbursed in USD / INR at ₹91/USD.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SAARC Scholars Spotlight & Fellowship Community -->
+<section class="section scholars-spotlight-section">
+    <div class="institutional-section-header centered">
+        <span class="section-sup-label">Scholastic Excellence & Regional Impact</span>
+        <h2 class="section-main-heading">SAARC Scholars Spotlight</h2>
+        <p class="section-sub-heading">Meet extraordinary scholars supported by South Asian University fellowships, merit concessions, and inter-governmental grants.</p>
+    </div>
+
+    <div class="scholars-impact-grid">
+        <article class="scholar-profile-card">
+            <div class="scholar-card-top">
+                <div class="scholar-avatar-wrap">
+                    <img src="{{ url_for('static', filename='images/scholar-male.jpeg') }}" alt="Aarav Sharma" class="scholar-avatar-img">
+                    <span class="scholar-flag-badge" title="India">🇮🇳</span>
+                </div>
+                <div class="scholar-info">
+                    <span class="scholar-award-tag">SJS MERIT FELLOW</span>
+                    <h3 class="scholar-name">Aarav Sharma</h3>
+                    <span class="scholar-program">M.Tech Computer Science &bull; CGPA: <strong>9.12 / 10.00</strong></span>
+                    <span class="scholar-nation">Nationality: <strong>India</strong> &bull; Roll: SAU/2024/CSE/019</span>
+                </div>
+            </div>
+            <blockquote class="scholar-quote">
+                "Receiving the SAARC-India Silver Jubilee Scholarship eliminated tuition barriers and provided a monthly stipend at the locked rate of ₹91/USD. This enabled me to focus entirely on distributed systems and parallel computing research."
+            </blockquote>
+            <div class="scholar-stat-strip">
+                <div><span>Award:</span> <strong>100% Tuition Waiver + $4,200/yr</strong></div>
+                <div><span>Residence:</span> <strong>Hostel Block A</strong></div>
+            </div>
+        </article>
+
+        <article class="scholar-profile-card">
+            <div class="scholar-card-top">
+                <div class="scholar-avatar-wrap">
+                    <img src="{{ url_for('static', filename='images/scholar-female.jpeg') }}" alt="Pooja Shrestha" class="scholar-avatar-img">
+                    <span class="scholar-flag-badge" title="Nepal">🇳🇵</span>
+                </div>
+                <div class="scholar-info">
+                    <span class="scholar-award-tag">PRESIDENT'S RESEARCH FELLOW</span>
+                    <h3 class="scholar-name">Pooja Shrestha</h3>
+                    <span class="scholar-program">M.Sc Biotechnology &bull; CGPA: <strong>8.85 / 10.00</strong></span>
+                    <span class="scholar-nation">Nationality: <strong>Nepal</strong> &bull; Roll: SAU/2024/LSB/007</span>
+                </div>
+            </div>
+            <blockquote class="scholar-quote">
+                "Coming from Kathmandu to South Asian University's permanent campus opened doors to advanced molecular genetics laboratories. The financial aid portal made the application and semester renewal completely seamless."
+            </blockquote>
+            <div class="scholar-stat-strip">
+                <div><span>Award:</span> <strong>Full Fellowship + Living Grant</strong></div>
+                <div><span>Residence:</span> <strong>Hostel Block B</strong></div>
+            </div>
+        </article>
+
+        <article class="scholar-profile-card">
+            <div class="scholar-card-top">
+                <div class="scholar-avatar-wrap">
+                    <img src="{{ url_for('static', filename='images/scholars-group.jpeg') }}" alt="Graduation Cohort" class="scholar-avatar-img">
+                    <span class="scholar-flag-badge" title="SAARC Region">🌐</span>
+                </div>
+                <div class="scholar-info">
+                    <span class="scholar-award-tag">REGIONAL CONVOCATION</span>
+                    <h3 class="scholar-name">Convocation & Regional Placement</h3>
+                    <span class="scholar-program">Doctoral & Masters Alumni &bull; 8 SAARC Nations</span>
+                    <span class="scholar-nation">Regional Diplomatic Accord &bull; 100% Placement</span>
+                </div>
+            </div>
+            <blockquote class="scholar-quote">
+                "SAU degrees are automatically recognized across all eight SAARC governments. Graduating scholars advance into premier research institutes, ministries, central banks, and global international organizations."
+            </blockquote>
+            <div class="scholar-stat-strip">
+                <div><span>Impact:</span> <strong>8 Member Nations Unified</strong></div>
+                <div><span>Alumni:</span> <strong>Global Recognition</strong></div>
+            </div>
+        </article>
+
+        <article class="scholar-profile-card">
+            <div class="scholar-card-top">
+                <div class="scholar-avatar-wrap">
+                    <img src="{{ url_for('static', filename='images/scholars-cohort.jpeg') }}" alt="Pan-South Asian Student Community" class="scholar-avatar-img">
+                    <span class="scholar-flag-badge" title="South Asia">🌏</span>
+                </div>
+                <div class="scholar-info">
+                    <span class="scholar-award-tag">STUDENT DIVERSITY</span>
+                    <h3 class="scholar-name">Pan-South Asian Community</h3>
+                    <span class="scholar-program">50%+ Scholars on Financial Concession</span>
+                    <span class="scholar-nation">Statutory Mandate: No Deserving Scholar Denied</span>
+                </div>
+            </div>
+            <blockquote class="scholar-quote">
+                "Under the SAU Financial Aid Ordinance, scholars from Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, and Sri Lanka study and live together as one regional community."
+            </blockquote>
+            <div class="scholar-stat-strip">
+                <div><span>Coverage:</span> <strong>Merit & Need-Based Quotas</strong></div>
+                <div><span>Disbursal:</span> <strong>Locked ₹91/USD Rate</strong></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- Downloadable Prescribed Annexures Section -->
+<section class="section annexure-downloads-section">
+    <div class="annexure-box">
+        <div class="annexure-intro">
+            <span class="official-tag">STATUTORY ANNEXURES</span>
+            <h3>Prescribed Formats & Verification Affidavits</h3>
+            <p>Download the official templates required to be appended with your scholarship docket:</p>
+        </div>
+        <div class="annexure-grid">
+            <div class="annexure-item">
+                <span class="annexure-code">ANNEXURE - A</span>
+                <strong>Family Income Certificate Affidavit</strong>
+                <p>To be attested by First Class Magistrate / Sub-Divisional Officer / Upazila Nirbahi Officer.</p>
+                <a href="{{ url_for('guidelines') }}#annexures" class="annexure-link">View Prescribed Format &darr;</a>
+            </div>
+            <div class="annexure-item">
+                <span class="annexure-code">ANNEXURE - B</span>
+                <strong>Departmental Bonafide & Attendance Certificate</strong>
+                <p>Issued by Head of Department certifying minimum 75% attendance and academic continuity.</p>
+                <a href="{{ url_for('guidelines') }}#annexures" class="annexure-link">View Prescribed Format &darr;</a>
+            </div>
+            <div class="annexure-item">
+                <span class="annexure-code">ANNEXURE - C</span>
+                <strong>Research Synopsis Endorsement Form</strong>
+                <p>For Master's thesis and Ph.D. scholars seeking doctoral allowances and laboratory bench fee waivers.</p>
+                <a href="{{ url_for('guidelines') }}#annexures" class="annexure-link">View Prescribed Format &darr;</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Software Engineering Academic Evaluation Sandbox -->
+<section class="section demo-sandbox-section">
+    <div class="sandbox-inner">
+        <div class="sandbox-tag">SE PROJECT ACCREDITATION & EVALUATION CONSOLE</div>
+        <h3>Demonstration Access Credentials</h3>
+        <p class="sandbox-note">Evaluators and grading committee members may access any of the pre-configured academic profiles:</p>
+        
+        <div class="sandbox-cards-grid">
+            <div class="sandbox-cred-card">
+                <div class="cred-header-flex">
+                    <img src="{{ url_for('static', filename='images/scholar-male.jpeg') }}" alt="Aarav Sharma" class="sandbox-avatar-thumb">
+                    <div>
+                        <div class="cred-role-tag role-student">Enrolled Scholar (India)</div>
+                        <strong>Aarav Sharma</strong>
+                    </div>
+                </div>
+                <span class="cred-sub">M.Tech CSE &bull; CGPA: <strong>9.12 / 10.00</strong> &bull; Roll: SAU/2024/CSE/019</span>
+                <div class="cred-code-wrap">
+                    <code>student@university.edu</code>
+                    <code>Student123!</code>
+                </div>
+            </div>
+
+            <div class="sandbox-cred-card">
+                <div class="cred-header-flex">
+                    <img src="{{ url_for('static', filename='images/scholar-female.jpeg') }}" alt="Pooja Shrestha" class="sandbox-avatar-thumb">
+                    <div>
+                        <div class="cred-role-tag role-student">Enrolled Scholar (Nepal)</div>
+                        <strong>Pooja Shrestha</strong>
+                    </div>
+                </div>
+                <span class="cred-sub">M.Sc Biotech &bull; CGPA: <strong>8.85 / 10.00</strong> &bull; Roll: SAU/2024/LSB/007</span>
+                <div class="cred-code-wrap">
+                    <code>pooja.shrestha@sau.ac.in</code>
+                    <code>Student123!</code>
+                </div>
+            </div>
+
+            <div class="sandbox-cred-card">
+                <div class="cred-header-flex">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="Prof. Maya Sen" class="sandbox-avatar-thumb">
+                    <div>
+                        <div class="cred-role-tag role-reviewer">Faculty Reviewer (SCSFA)</div>
+                        <strong>Prof. Maya Sen</strong>
+                    </div>
+                </div>
+                <span class="cred-sub">Member Secretary, Standing Committee</span>
+                <div class="cred-code-wrap">
+                    <code>reviewer@university.edu</code>
+                    <code>Reviewer123!</code>
+                </div>
+            </div>
+
+            <div class="sandbox-cred-card">
+                <div class="cred-header-flex">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="Dr. K. Raghavan" class="sandbox-avatar-thumb">
+                    <div>
+                        <div class="cred-role-tag role-admin">Administrative Dean</div>
+                        <strong>Dr. K. Raghavan</strong>
+                    </div>
+                </div>
+                <span class="cred-sub">Dean, Directorate of Student Affairs</span>
+                <div class="cred-code-wrap">
+                    <code>admin@university.edu</code>
+                    <code>Admin123!</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="sandbox-action">
+            <a href="{{ url_for('login') }}" class="btn btn-secondary">Proceed to Institutional Single Sign-On (SSO) &rarr;</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

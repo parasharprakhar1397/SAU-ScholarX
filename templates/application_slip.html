@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Docket &bull; {{ app.application_no or 'SAU-SCH-2026' }} &bull; South Asian University</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Dedicated Print Stylesheet */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #ffffff !important; color: #000000 !important; font-size: 10.5pt; }
+            .slip-sheet { box-shadow: none !important; border: 1px solid #000 !important; margin: 0 !important; max-width: 100% !important; }
+        }
+        .slip-wrapper {
+            max-width: 920px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+        .slip-sheet {
+            background: #ffffff;
+            border: 2px solid #0c2340;
+            border-radius: 4px;
+            padding: 38px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .slip-letterhead {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #7a1c2d;
+            padding-bottom: 18px;
+            margin-bottom: 22px;
+        }
+        .slip-univ-title h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.55rem;
+            color: #0c2340;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .slip-univ-title p {
+            margin: 2px 0 0;
+            font-size: 0.82rem;
+            color: #555;
+        }
+        .slip-seal-wrap {
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+        }
+        .docket-meta-banner {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .docket-barcode {
+            letter-spacing: 3px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0c2340;
+        }
+        .slip-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.88rem;
+        }
+        .slip-table th, .slip-table td {
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .slip-table th {
+            background: #f1f5f9;
+            color: #0c2340;
+            width: 28%;
+            font-weight: 600;
+        }
+        .statement-display-box {
+            background: #fcfbf9;
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #7a1c2d;
+            padding: 12px 14px;
+            font-style: italic;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        .signatures-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 18px;
+            border-top: 1px dashed #94a3b8;
+            text-align: center;
+            font-size: 0.82rem;
+        }
+        .sig-line {
+            margin-top: 36px;
+            border-top: 1px solid #000;
+            padding-top: 6px;
+            font-weight: 600;
+            color: #0c2340;
+        }
+        .watermark-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 4.8rem;
+            font-family: 'Cinzel', serif;
+            color: rgba(12, 35, 64, 0.03);
+            pointer-events: none;
+            white-space: nowrap;
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+    <div class="slip-wrapper">
+        <!-- Top Action Bar (hidden when printing) -->
+        <div class="no-print" style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">&larr; Return to Dashboard</a>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="window.print()" class="btn btn-primary btn-sm">🖨️ Print / Save as Official PDF</button>
+            </div>
+        </div>
+
+        <div class="slip-sheet">
+            <div class="watermark-text">SOUTH ASIAN UNIVERSITY</div>
+
+            <!-- Letterhead -->
+            <div class="slip-letterhead">
+                <div class="slip-seal-wrap">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="SAU Crest" class="slip-seal-img" style="width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid #c5a059; object-fit: cover;">
+                </div>
+                <div class="slip-univ-title" style="flex: 1; margin: 0 18px;">
+                    <div style="font-size: 0.72rem; letter-spacing: 1px; color: #7a1c2d; font-weight: 700;">SOUTH ASIAN UNIVERSITY &bull; NEW DELHI</div>
+                    <h1>OFFICIAL SCHOLARSHIP VERIFICATION DOSSIER</h1>
+                    <p>Directorate of Student Affairs &bull; Standing Committee on Scholarships & Financial Aid (SCSFA)</p>
+                    <p style="font-size: 0.76rem;">Gaushala Road, Maidan Garhi, New Delhi – 110068, India &bull; Phone: +91 (11) 3565 6600 / 6500</p>
+                </div>
+                <div class="slip-photo-box" style="width: 70px; height: 82px; border: 1px solid #94a3b8; border-radius: 4px; overflow: hidden; background: #f8fafc; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <img src="{{ url_for('static', filename=(app.student_name|avatar)) }}" alt="{{ app.student_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+
+            <!-- Reference Bar -->
+            <div class="docket-meta-banner">
+                <div>
+                    <strong>DOCKET REF NO:</strong> <span class="docket-barcode">{{ app.application_no or 'SAU-SCH-2026-' ~ app.id }}</span>
+                </div>
+                <div>
+                    <strong>FILED DATE:</strong> {{ app.submitted_at[:16] }}
+                </div>
+                <div>
+                    <strong>LOCKED RATE:</strong> 1 USD = ₹91.00 INR
+                </div>
+            </div>
+
+            <!-- Applicant Credentials -->
+            <h3 style="font-size: 0.95rem; color: #0c2340; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 10px;">I. APPLICANT PARTICULARS</h3>
+            <table class="slip-table">
+                <tr>
+                    <th>Candidate Full Name</th>
+                    <td><strong>{{ app.student_name }}</strong></td>
+                    <th>SAU Student / Roll No</th>
+                    <td><strong>{{ app.campus_id or 'N/A' }}</strong></td>
+                </tr>
+                <tr>
+                    <th>SAARC Member State</th>
+                    <td>{{ app.country or 'India' }}</td>
+                    <th>Institutional Email</th>
+                    <td>{{ app.student_email }}</td>
+                </tr>
+                <tr>
+                    <th>Enrolled Faculty</th>
+                    <td>{{ app.faculty or 'Faculty of Mathematics & Computer Science' }}</td>
+                    <th>Academic Degree Program</th>
+                    <td>{{ app.program or 'Postgraduate' }}</td>
+                </tr>
+                <tr>
+                    <th>Academic Standing (CGPA)</th>
+                    <td><strong style="color: #7a1c2d;">{{ "%.2f"|format(app.gpa) if app.gpa else 'N/A' }} / 10.00</strong> <small>(10-Point Scale)</small></td>
+                    <th>Campus Accommodation</th>
+                    <td>{{ app.hostel_resident or 'Hostel Block A, Maidan Garhi Campus' }}</td>
+                </tr>
+            </table>
+
+            <!-- Scheme Particulars -->
+            <h3 style="font-size: 0.95rem; color: #0c2340; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 10px;">II. SCHOLARSHIP SCHEME & SANCTION PARTICULARS</h3>
+            <table class="slip-table">
+                <tr>
+                    <th>Scholarship Ordinance Title</th>
+                    <td colspan="3"><strong>{{ app.scholarship_title }}</strong></td>
+                </tr>
+                <tr>
+                    <th>Category Classification</th>
+                    <td>{{ app.category }}</td>
+                    <th>Academic Session</th>
+                    <td>{{ app.academic_year or '2026-2027' }}</td>
+                </tr>
+                <tr>
+                    <th>Ordinance Sanction Amount</th>
+                    <td>
+                        <strong>${{ "%.2f"|format(app.max_amount) }}</strong><br>
+                        <small style="color: #7a1c2d; font-weight: 600;">{{ app.max_amount|inr }} INR (@ ₹91/USD)</small>
+                    </td>
+                    <th>Requested Assistance</th>
+                    <td>
+                        <strong style="color: #0c2340;">${{ "%.2f"|format(app.requested_amount or app.max_amount) }}</strong><br>
+                        <small style="color: #7a1c2d; font-weight: 600;">{{ (app.requested_amount or app.max_amount)|inr }} INR (@ ₹91/USD)</small>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Current Scrutiny Status</th>
+                    <td colspan="3">
+                        <strong style="text-transform: uppercase; color: {% if app.status == 'Approved' %}#15803d{% elif app.status == 'Rejected' %}#b91c1c{% else %}#0c2340{% endif %};">
+                            {{ app.status }}
+                        </strong>
+                        {% if app.staff_notes %}
+                            &bull; <em>Remarks: "{{ app.staff_notes }}"</em>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Candidate Justification -->
+            <h3 style="font-size: 0.95rem; color: #0c2340; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 8px;">III. STATEMENT OF PURPOSE & JUSTIFICATION</h3>
+            <div class="statement-display-box">
+                {{ app.essay }}
+            </div>
+
+            <!-- Attached Documents List -->
+            <h3 style="font-size: 0.95rem; color: #0c2340; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-bottom: 10px;">IV. VERIFIED STATUTORY ATTACHMENTS</h3>
+            {% if docs %}
+                <table class="slip-table" style="margin-bottom: 24px;">
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">#</th>
+                            <th style="width: 35%;">Classification</th>
+                            <th>Original Verified Filename</th>
+                            <th style="width: 25%;">Upload Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in docs %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ doc.kind }}</td>
+                                <td>{{ doc.original_name }}</td>
+                                <td>{{ doc.uploaded_at[:16] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p style="font-size: 0.85rem; color: #64748b; font-style: italic; margin-bottom: 20px;">No external documents were attached to this digital submission docket.</p>
+            {% endif %}
+
+            <!-- Institutional Signatures & Endorsements -->
+            <div class="signatures-grid">
+                <div>
+                    <div class="sig-line">Signature of Applicant</div>
+                    <small>Date: {{ app.submitted_at[:10] }}</small>
+                </div>
+                <div>
+                    <div class="sig-line">Chairperson / HoD Endorsement</div>
+                    <small>Faculty Scrutiny Committee</small>
+                </div>
+                <div>
+                    <div class="sig-line">Dean, Student Affairs (Seal)</div>
+                    <small>Standing Committee on Scholarships (SCSFA)</small>
+                </div>
+            </div>
+
+            <!-- Footnote -->
+            <div style="margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 8px; font-size: 0.72rem; color: #64748b; text-align: center;">
+                Official verification dossier issued under the seal of South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, India. Conversion locked at ₹91/USD. CGPA computed on 10.00 scale. Validated electronically under SAU Inter-Governmental Statutes.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

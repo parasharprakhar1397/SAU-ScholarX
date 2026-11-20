@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}Standing Committee on Scholarships (SCSFA) Workspace &bull; South Asian University{% endblock %}
+
+{% block content %}
+<!-- Committee Masthead -->
+<div class="committee-masthead">
+    <div class="committee-masthead-inner">
+        <div class="committee-badge-icon">⚖️</div>
+        <div class="committee-titles">
+            <span class="committee-tag">CENTRAL SCRUTINY & ADJUDICATION DESK</span>
+            <h1 class="committee-title">Standing Committee on Scholarships & Financial Aid (SCSFA)</h1>
+            <p class="committee-sub">
+                Official Review Board for South Asian University &bull; Directorate of Student Affairs &bull; Session 2026–2027 &bull; Locked Rate: <strong>1 USD = ₹91.00 INR</strong>
+            </p>
+        </div>
+        <div class="committee-actions">
+            <a href="#publishOrdinanceCard" class="btn btn-gold btn-sm">
+                <span>➕ Promulgate New Scholarship Ordinance</span>
+            </a>
+            <a href="{{ url_for('guidelines') }}" class="btn btn-secondary btn-sm">
+                <span>📑 Scrutiny Norms</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Review Board Metrics -->
+<div class="stats-grid stats-grid-4">
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-total">📊</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ stats.total or 0 }}</span>
+            <span class="stat-title">Total Dockets Lodged</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-active">📥</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ stats.submitted or 0 }}</span>
+            <span class="stat-title">Awaiting First Scrutiny</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-review">🔄</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ stats.reviewing or 0 }}</span>
+            <span class="stat-title">In Faculty Committee Review</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrap icon-approved">🏛️</div>
+        <div class="stat-body">
+            <span class="stat-value">{{ stats.approved or 0 }}</span>
+            <span class="stat-title">Sanction Confirmed</span>
+        </div>
+    </div>
+</div>
+
+<!-- Scrutiny Filters Toolbar -->
+<div class="filter-card">
+    <form method="GET" action="{{ url_for('dashboard') }}" class="filter-form">
+        <div class="filter-group-select">
+            <label class="form-label-xs">Decision Status:</label>
+            <select name="status" class="form-control form-control-sm">
+                <option value="">All Scrutiny States</option>
+                <option value="Submitted" {% if status_filter == 'Submitted' %}selected{% endif %}>Submitted (Pending)</option>
+                <option value="Under Review" {% if status_filter == 'Under Review' %}selected{% endif %}>Under Review</option>
+                <option value="Needs Information" {% if status_filter == 'Needs Information' %}selected{% endif %}>Needs Information</option>
+                <option value="Approved" {% if status_filter == 'Approved' %}selected{% endif %}>Approved (Sanctioned)</option>
+                <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+            </select>
+        </div>
+
+        <div class="filter-group-select">
+            <label class="form-label-xs">Enrolled Faculty:</label>
+            <select name="faculty" class="form-control form-control-sm">
+                <option value="">All Academic Faculties</option>
+                {% for f in sau_faculties %}
+                    <option value="{{ f }}" {% if faculty_filter == f %}selected{% endif %}>{{ f }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group-select">
+            <label class="form-label-xs">SAARC Member State:</label>
+            <select name="country" class="form-control form-control-sm">
+                <option value="">All SAARC Nationalities</option>
+                {% for c in saarc_countries %}
+                    <option value="{{ c.name }}" {% if country_filter == c.name %}selected{% endif %}>{{ c.flag }} {{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-actions" style="margin-top: 18px;">
+            <button type="submit" class="btn btn-primary btn-sm">Apply Scrutiny Filters</button>
+            {% if status_filter or faculty_filter or country_filter %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-sm">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Committee Review Queue -->
+<section class="section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Adjudication Docket Stack &bull; Evaluation on 10.00 CGPA Scale</span>
+            <h2 class="section-main-heading">Candidate Dossiers Awaiting Committee Action</h2>
+            <p class="section-sub-heading">Examine candidate eligibility, verify attachments, and record official committee determination.</p>
+        </div>
+        <div>
+            <span class="badge badge-subtle">Showing {{ apps|length }} Applicant Record{{ 's' if apps|length != 1 else '' }}</span>
+        </div>
+    </div>
+
+    {% if apps %}
+        <div class="review-queue-stack">
+            {% for a in apps %}
+                <div class="review-card">
+                    <!-- Card Header -->
+                    <div class="review-card-header">
+                        <div class="applicant-meta">
+                            <span class="applicant-avatar">
+                                {% if a.country == 'Nepal' %}🇳🇵
+                                {% elif a.country == 'Bangladesh' %}🇧🇩
+                                {% elif a.country == 'Bhutan' %}🇧🇹
+                                {% elif a.country == 'Sri Lanka' %}🇱🇰
+                                {% elif a.country == 'Maldives' %}🇲🇻
+                                {% elif a.country == 'Afghanistan' %}🇦🇫
+                                {% elif a.country == 'Pakistan' %}🇵🇰
+                                {% else %}🇮🇳{% endif %}
+                            </span>
+                            <div>
+                                <h3 class="applicant-name">{{ a.student_name }}</h3>
+                                <div class="applicant-sub">
+                                    <span class="pill-meta">SAU Roll: <strong>{{ a.campus_id or 'N/A' }}</strong></span>
+                                    <span class="pill-meta">SAARC State: <strong>{{ a.country or 'India' }}</strong></span>
+                                    <span class="pill-meta">Faculty: <strong>{{ a.faculty }}</strong></span>
+                                    <span class="pill-meta">Degree: <strong>{{ a.program }}</strong></span>
+                                    <span class="pill-meta">CGPA: <strong class="text-gold">{{ "%.2f"|format(a.gpa) if a.gpa else 'N/A' }} / 10.00</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="review-status-wrap">
+                            <div class="docket-ref-code">{{ a.application_no or 'SAU-SCH-2026-' ~ a.id }}</div>
+                            <span class="app-submitted-time">Filed: {{ a.submitted_at[:16] }}</span>
+                            {% if a.status == 'Approved' %}
+                                <span class="badge badge-success">✓ Sanction Approved</span>
+                            {% elif a.status == 'Rejected' %}
+                                <span class="badge badge-danger">✕ Not Recommended</span>
+                            {% elif a.status == 'Needs Information' %}
+                                <span class="badge badge-warning">⚠️ Rectification Pending</span>
+                            {% elif a.status == 'Under Review' %}
+                                <span class="badge badge-info">🔄 Scrutiny Active</span>
+                            {% else %}
+                                <span class="badge badge-neutral">📥 Docket Filed</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="review-card-body">
+                        <div class="scholarship-target-box">
+                            <div>
+                                <strong>Ordinance Applied For:</strong> {{ a.title }}
+                                <span class="badge badge-category" style="margin-left: 6px;">{{ a.category }}</span>
+                            </div>
+                            <div class="ml-auto">
+                                <strong>Requested Amount:</strong> 
+                                <span class="text-gold font-bold">${{ "%.2f"|format(a.requested_amount or 0) }}</span> 
+                                <span class="inr-sub-val font-semibold">({{ (a.requested_amount or 0)|inr }})</span>
+                                <a href="{{ url_for('documents', aid=a.id) }}" class="btn btn-xs btn-outline ml-2">
+                                    📎 Inspect Attachments
+                                </a>
+                                <a href="{{ url_for('application_slip', aid=a.id) }}" target="_blank" class="btn btn-xs btn-outline-primary ml-1">
+                                    🖨️ Official Dossier Slip
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Personal Statement -->
+                        <div class="statement-box">
+                            <div class="statement-label">Candidate Statement of Purpose & Need Justification:</div>
+                            <p class="statement-text">{{ a.essay }}</p>
+                        </div>
+
+                        <!-- Inline Review Form -->
+                        <form method="POST" action="{{ url_for('update_application', aid=a.id) }}" class="inline-decision-form">
+                            <div class="form-row align-end">
+                                <div class="form-group status-select-group">
+                                    <label class="form-label form-label-sm">Committee Determination:</label>
+                                    <select name="status" class="form-control form-control-sm">
+                                        <option value="Submitted" {% if a.status == 'Submitted' %}selected{% endif %}>Submitted (Initial)</option>
+                                        <option value="Under Review" {% if a.status == 'Under Review' %}selected{% endif %}>Under Review (Faculty Scrutiny)</option>
+                                        <option value="Needs Information" {% if a.status == 'Needs Information' %}selected{% endif %}>Needs Information (Rectification)</option>
+                                        <option value="Approved" {% if a.status == 'Approved' %}selected{% endif %}>Approved (Sanction Sanctioned)</option>
+                                        <option value="Rejected" {% if a.status == 'Rejected' %}selected{% endif %}>Rejected (Ineligible / Disapproved)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group notes-input-group">
+                                    <label class="form-label form-label-sm">Official Committee Minute / Remarks to Candidate:</label>
+                                    <input type="text" name="staff_notes" value="{{ a.staff_notes or '' }}" class="form-control form-control-sm" placeholder="e.g. Verified by FMCS committee. SJS fee remission approved under Clause 4(b)...">
+                                </div>
+
+                                <div class="form-group btn-group-item">
+                                    <button type="submit" class="btn btn-sm btn-primary">Commit Determination</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state-card">
+            <div class="empty-icon">📫</div>
+            <h3>No Application Dockets in Current Filter View</h3>
+            <p>No student submissions match the active scrutiny filter parameters. Try clearing the filters to view the complete queue.</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-sm">Clear Active Filters</a>
+        </div>
+    {% endif %}
+</section>
+
+<!-- Publish New Scholarship Ordinance Form -->
+<section class="section" id="publishOrdinanceCard">
+    <div class="card form-container-card">
+        <div class="card-header-styled">
+            <span class="official-tag">STATUTORY GAZETTE ISSUANCE</span>
+            <h2 class="card-title">Promulgate New Scholarship Scheme / Ordinance</h2>
+            <p class="card-subtitle">Authorize and gazette a new funding scheme under the approval of the SAU Governing Board &bull; Disbursal converted at locked rate <strong>₹91.00 INR/USD</strong>.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('create_scholarship') }}" class="styled-form">
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="title" class="form-label">Ordinance Title *</label>
+                    <input type="text" id="title" name="title" class="form-control" placeholder="e.g. SAU Regional Climate Science Research Fellowship" required>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="category" class="form-label">Classification Category *</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="Inter-Governmental">Inter-Governmental (SJS / SAARC)</option>
+                        <option value="Doctoral Fellowship">Doctoral Fellowship</option>
+                        <option value="Financial Support">Financial Support (FSS Need-based)</option>
+                        <option value="Departmental Research" selected>Departmental Technical Research</option>
+                        <option value="Academic Merit">Academic Merit (Semester Decile)</option>
+                        <option value="Regional Quota">Regional Representation Quota</option>
+                        <option value="Life Sciences & Biotech">Life Sciences & Biotechnology</option>
+                        <option value="Legal Studies & Policy">Legal Studies & Policy</option>
+                    </select>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="amount" class="form-label">Annual Value (USD $) *</label>
+                    <input type="number" step="100" min="200" id="amount" name="amount" class="form-control" placeholder="3500" required>
+                    <small class="form-help">Automatically converted at ₹91/USD.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Ordinance Preamble & Scope *</label>
+                <textarea id="description" name="description" rows="3" class="form-control" placeholder="Specify legislative intent, sponsoring member state/partner, and funding coverage..." required></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="eligibility" class="form-label">Statutory Eligibility Criteria (10.00 CGPA scale) *</label>
+                    <input type="text" id="eligibility" name="eligibility" class="form-control" placeholder="e.g. Enrolled in M.Sc/M.Tech/Ph.D; Minimum CGPA 8.50 on a 10.00 scale; Clean disciplinary record." required>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="deadline" class="form-label">Verification Cutoff Date *</label>
+                    <input type="date" id="deadline" name="deadline" class="form-control" required>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="status" class="form-label">Gazette Status</label>
+                    <select id="status" name="status" class="form-control">
+                        <option value="Open" selected>Open (Active Submissions)</option>
+                        <option value="Closed">Closed (Archived)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="requirements" class="form-label">Mandatory Verification Annexures & Attachments *</label>
+                <input type="text" id="requirements" name="requirements" class="form-control" placeholder="e.g. SAARC Passport/ID, Degree Transcripts, Annexure-A Income Affidavit, HoD Endorsement" required>
+            </div>
+
+            <button type="submit" class="btn btn-gold btn-lg">Publish Ordinance to Official Gazette</button>
+        </form>
+    </div>
+</section>
+
+<!-- Active Ordinance Directory -->
+<section class="section">
+    <div class="institutional-section-header">
+        <div>
+            <span class="section-sup-label">Statutory Registry &bull; Conversion at ₹91/USD</span>
+            <h2 class="section-main-heading">Master Scholarship Ordinances Directory</h2>
+            <p class="section-sub-heading">Complete record of institutional schemes currently on the University Register.</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-table">
+            <thead>
+                <tr>
+                    <th>Ordinance Scheme</th>
+                    <th>Classification</th>
+                    <th>Annual Grant (USD / INR)</th>
+                    <th>Cutoff Date</th>
+                    <th>Gazette Status</th>
+                    <th>Promulgated</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in scholarships %}
+                    <tr>
+                        <td>
+                            <strong class="app-title">{{ s.title }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge badge-category">{{ s.category }}</span>
+                        </td>
+                        <td>
+                            <strong class="text-gold">${{ "%.2f"|format(s.amount) }}</strong>
+                            <div class="inr-sub-val">{{ s.amount|inr }} INR</div>
+                        </td>
+                        <td><span class="date-tag">📅 {{ s.deadline }}</span></td>
+                        <td>
+                            {% if s.status == 'Open' %}
+                                <span class="badge badge-success">Open</span>
+                            {% else %}
+                                <span class="badge badge-neutral">Closed</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ s.created_at[:10] }}</td>
+                        <td>
+                            <a href="{{ url_for('scholarship_detail', sid=s.id) }}" class="btn btn-xs btn-outline">
+                                View Ordinance Page
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

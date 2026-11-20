@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}South Asian University - ScholarX Institutional Portal{% endblock %}</title>
+    <!-- Google Fonts: Cinzel for academic prestige + Plus Jakarta Sans & Lora for UI & legal text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Top SAARC Diplomatic & Inter-Governmental Bar -->
+    <div class="top-intergov-bar">
+        <div class="container top-bar-content">
+            <div class="saarc-declaration">
+                <span class="saarc-crest-icon">🌐</span>
+                <span class="saarc-text">An International University Established by the Eight Member States of <strong>SAARC</strong></span>
+                <div class="saarc-flags-strip" title="SAARC Member Nations: Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, Sri Lanka">
+                    <span class="flag-chip">🇦🇫 Afghanistan</span>
+                    <span class="flag-chip">🇧🇩 Bangladesh</span>
+                    <span class="flag-chip">🇧🇹 Bhutan</span>
+                    <span class="flag-chip">🇮🇳 India</span>
+                    <span class="flag-chip">🇲🇻 Maldives</span>
+                    <span class="flag-chip">🇳🇵 Nepal</span>
+                    <span class="flag-chip">🇵🇰 Pakistan</span>
+                    <span class="flag-chip">🇱🇰 Sri Lanka</span>
+                </div>
+            </div>
+            <div class="top-meta-links">
+                <span class="meta-item">📍 Gaushala Road, Maidan Garhi, New Delhi - 110068</span>
+                <span class="meta-item divider">|</span>
+                <span class="meta-item">📞 +91 (11) 3565 6600</span>
+                <span class="meta-item divider">|</span>
+                <span class="meta-item currency-rate-tag" title="Approved university locked exchange rate for Academic Session 2026–27">
+                    💱 <strong>1 USD = ₹91.00 INR</strong> (Locked Rate)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Official University Masthead -->
+    <header class="univ-masthead">
+        <div class="container masthead-inner">
+            <a href="{{ url_for('index') }}" class="univ-brand-block">
+                <!-- Authentic SAU Emblem -->
+                <div class="univ-brand-crest">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="South Asian University Official Seal" class="univ-brand-logo-img">
+                </div>
+                <div class="univ-identity-titles">
+                    <span class="univ-motto-sanskrit">ज्ञानं सीमारहितम् &bull; Knowledge Without Borders</span>
+                    <h1 class="univ-main-title">SOUTH ASIAN UNIVERSITY</h1>
+                    <span class="univ-portal-sub">ScholarX &bull; Directorate of Student Affairs & Financial Assistance</span>
+                </div>
+            </a>
+
+            <!-- Right-side Fast Action / User Card -->
+            <div class="masthead-right">
+                {% if session.get('user_id') %}
+                    <div class="user-credential-card">
+                        <div class="user-avatar-wrap">
+                            {% if role == 'student' %}
+                                <img src="{{ url_for('static', filename=(current_user|avatar)) }}" alt="{{ current_user }}" class="user-avatar-photo">
+                            {% else %}
+                                <div class="user-avatar-initials">{{ current_user[:2]|upper }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="user-meta-lines">
+                            <span class="user-display-name">{{ current_user }}</span>
+                            <div class="user-sub-pills">
+                                <span class="role-pill role-{{ role }}">{{ role|upper }}</span>
+                                {% if user_profile and user_profile.country %}
+                                    <span class="country-pill">{{ user_profile.country }}</span>
+                                {% endif %}
+                                {% if user_profile and user_profile.student_id %}
+                                    <span class="id-pill">{{ user_profile.student_id }}</span>
+                                {% endif %}
+                                {% if user_profile and user_profile.gpa and role == 'student' %}
+                                    <span class="gpa-pill">CGPA: {{ "%.2f"|format(user_profile.gpa) }}/10</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{{ url_for('logout') }}" class="btn-logout-link" title="Secure Sign Out">Sign Out ⇥</a>
+                    </div>
+                {% else %}
+                    <div class="auth-masthead-actions">
+                        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">Staff & Student Login</a>
+                        <a href="{{ url_for('register') }}" class="btn btn-accent btn-sm">Student Enrollment Portal</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Institutional Navigation Bar -->
+    <nav class="main-institutional-nav">
+        <div class="container nav-flex">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('index') }}" class="nav-anchor {% if request.endpoint == 'index' %}active{% endif %}">
+                        <span class="nav-ico">🏛️</span> University Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('scholarships') }}" class="nav-anchor {% if request.endpoint in ['scholarships', 'scholarship_detail'] %}active{% endif %}">
+                        <span class="nav-ico">📜</span> Scholarship Ordinances & Schemes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('guidelines') }}" class="nav-anchor {% if request.endpoint == 'guidelines' %}active{% endif %}">
+                        <span class="nav-ico">📑</span> Regulations & Annexures
+                    </a>
+                </li>
+                {% if session.get('user_id') %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('dashboard') }}" class="nav-anchor {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                            <span class="nav-ico">📋</span> 
+                            {% if role == 'student' %}My Student Dossier{% else %}Standing Committee Review Queue{% endif %}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            <div class="nav-right-indicator">
+                <span class="rate-indicator-pill" title="Locked rate for academic session 2026-27">
+                    Rate: <strong>$1 = ₹91.00</strong>
+                </span>
+                <span class="verification-desk-indicator">
+                    <span class="pulse-dot"></span> Financial Aid Cell
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Official Gazette / Circular Ticker -->
+    <div class="official-circular-strip">
+        <div class="container circular-content">
+            <span class="circular-badge">OFFICIAL GAZETTE</span>
+            <div class="circular-marquee">
+                <span>
+                    <strong>NOTIFICATION (Ref: SAU/SCSFA/2026/08):</strong> Applications invited for SJS, President's Research Fellowships, and Need-based FSS for Session 2026–27. Verified submission deadline is <strong>31 March 2027</strong>. Exchange rate locked at <strong>₹91.00 INR per USD</strong> for entire academic year. Grading scale is evaluated on a standard <strong>10.00 Cumulative CGPA scale</strong>.
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Body Container -->
+    <main class="portal-main-wrapper">
+        <div class="container">
+            <!-- Flash Message System -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, message in messages %}
+                            <div class="gazette-alert gazette-alert-{{ category }}">
+                                <div class="gazette-alert-symbol">
+                                    {% if category == 'success' %}✓{% elif category == 'error' %}✕{% else %}ℹ{% endif %}
+                                </div>
+                                <div class="gazette-alert-text">
+                                    <strong>{% if category == 'success' %}TRANSACTION CONFIRMED:{% elif category == 'error' %}NOTICE OF EXCEPTION:{% else %}INSTITUTIONAL DIRECTIVE:{% endif %}</strong>
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="gazette-alert-dismiss" onclick="this.parentElement.remove()" title="Dismiss">&times;</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Institutional Footer -->
+    <footer class="univ-footer">
+        <div class="container footer-grid">
+            <div class="footer-col about-col">
+                <div class="footer-seal-block">
+                    <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="South Asian University Seal" class="footer-logo-img">
+                    <div>
+                        <h4>SOUTH ASIAN UNIVERSITY</h4>
+                        <p class="footer-slogan">An International University Established by the Member States of SAARC</p>
+                    </div>
+                </div>
+                <p class="footer-desc">
+                    South Asian University was established by an Inter-Governmental Agreement among the eight member states of SAARC (Afghanistan, Bangladesh, Bhutan, India, Maldives, Nepal, Pakistan, Sri Lanka). Degrees awarded by SAU are recognized by all eight member nations.
+                </p>
+                <div class="footer-location-card">
+                    <strong>Permanent Campus Address:</strong><br>
+                    South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, India<br>
+                    <strong>Contact Phone:</strong><br>
+                    &bull; Admissions / Financial Aid: <a href="tel:+911135656600">+91 (11) 3565 6600</a><br>
+                    &bull; General Reception / PBX: <a href="tel:+911135656500">+91 (11) 3565 6500</a><br>
+                    &bull; Office of the President / Registrar: <a href="tel:+911135656595">+91 (11) 3565 6595</a><br>
+                    <strong>Official Email:</strong> <a href="mailto:financial-aid@sau.int">financial-aid@sau.int</a> &bull; <a href="mailto:admissions@sau.int">admissions@sau.int</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-heading">Academic Faculties</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="{{ url_for('scholarships') }}?category=Departmental+Research">Faculty of Mathematics & Computer Science</a></li>
+                    <li><a href="{{ url_for('scholarships') }}?category=Life+Sciences+%26+Biotech">Faculty of Life Sciences & Biotechnology</a></li>
+                    <li><a href="{{ url_for('scholarships') }}">Faculty of Economics</a></li>
+                    <li><a href="{{ url_for('scholarships') }}?category=Legal+Studies+%26+Policy">Faculty of Legal Studies</a></li>
+                    <li><a href="{{ url_for('scholarships') }}">Faculty of International Studies</a></li>
+                    <li><a href="{{ url_for('scholarships') }}">Faculty of Social Sciences</a></li>
+                    <li><a href="{{ url_for('scholarships') }}">Faculty of Physical & Chemical Sciences</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-heading">Statutory & Regulations</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="{{ url_for('guidelines') }}#statutory-basis">SAU Financial Aid Ordinance (Clause 12)</a></li>
+                    <li><a href="{{ url_for('guidelines') }}#annexures">Prescribed Annexures A, B & C</a></li>
+                    <li><a href="{{ url_for('guidelines') }}#saarc-quotas">SAARC Inter-Governmental Quota Rules</a></li>
+                    <li><a href="{{ url_for('guidelines') }}#income-slabs">Income & 10-Point CGPA Matrix</a></li>
+                    <li><a href="{{ url_for('guidelines') }}#appeals">Grievance & Appeals Redressal Procedure</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-heading">Inter-Governmental Affiliation</h4>
+                <div class="saarc-embassy-block">
+                    <p class="saarc-blurb">Established under the SAARC Charter signed in New Delhi. Operational under diplomatic privileges.</p>
+                    <div class="saarc-country-list-compact">
+                        <span>🇦🇫 AFG</span> &bull; <span>🇧🇩 BGD</span> &bull; <span>🇧🇹 BTN</span> &bull; <span>🇮🇳 IND</span><br>
+                        <span>🇲🇻 MDV</span> &bull; <span>🇳🇵 NPL</span> &bull; <span>🇵🇰 PAK</span> &bull; <span>🇱🇰 LKA</span>
+                    </div>
+                </div>
+                <div class="currency-conversion-box">
+                    <strong>Locked Currency Policy:</strong><br>
+                    <span>1 USD = ₹91.00 INR</span><br>
+                    <small>Locked at session commencement pursuant to Finance Committee resolution.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-sub-bottom">
+            <div class="container sub-bottom-content">
+                <p>&copy; 2026 South Asian University, Gaushala Road, Maidan Garhi, New Delhi – 110068, India. All Rights Reserved.</p>
+                <div class="sub-bottom-links">
+                    <span>Statutory Ordinances</span> &bull;
+                    <span>Locked Exchange Rate: ₹91/USD</span> &bull;
+                    <span>10.00 Scale CGPA</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

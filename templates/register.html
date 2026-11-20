@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Student Enrollment & Financial Aid Profile &bull; South Asian University{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card auth-card-wide">
+        <div class="auth-masthead-crest">
+            <div class="crest-mini-wrap">
+                <img src="{{ url_for('static', filename='images/sau-logo.jpeg') }}" alt="SAU Logo" class="auth-crest-img">
+            </div>
+            <span class="auth-crest-label">DIRECTORATE OF STUDENT AFFAIRS</span>
+            <h1 class="auth-title">Student Profile & Financial Aid Enrolment</h1>
+            <p class="auth-subtitle">Register your institutional academic record to submit scholarship and fellowship dockets &bull; Session 2026–2027</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+            <div class="form-section-title">I. Personal & Institutional Identifiers</div>
+            
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="name" class="form-label">Full Legal Name (as per Passport / National ID) *</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Aarav Sharma" required autofocus>
+                </div>
+                <div class="form-group col-half">
+                    <label for="email" class="form-label">Institutional University Email *</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="e.g. yourname@university.edu or @sau.ac.in" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="password" class="form-label">Create Portal Password *</label>
+                    <input type="password" id="password" name="password" minlength="8" class="form-control" placeholder="Minimum 8 characters" required>
+                    <small class="form-help">Must contain letters, numbers, or special symbols.</small>
+                </div>
+                <div class="form-group col-half">
+                    <label for="student_id" class="form-label">SAU Enrolment / Student Roll No *</label>
+                    <input type="text" id="student_id" name="student_id" class="form-control" placeholder="e.g. SAU/2026/CSE/042" required>
+                    <small class="form-help">Found on your university admission letter / identity card.</small>
+                </div>
+            </div>
+
+            <div class="form-section-title mt-4">II. Academic & Regional Affiliation</div>
+
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="country" class="form-label">SAARC Member State of Citizenship *</label>
+                    <select id="country" name="country" class="form-control" required>
+                        {% for c in saarc_countries %}
+                            <option value="{{ c.name }}" {% if c.name == 'India' %}selected{% endif %}>{{ c.flag }} {{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-half">
+                    <label for="faculty" class="form-label">Enrolled Faculty *</label>
+                    <select id="faculty" name="faculty" class="form-control" required>
+                        {% for f in sau_faculties %}
+                            <option value="{{ f }}">{{ f }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-half">
+                    <label for="program" class="form-label">Academic Degree & Major *</label>
+                    <input type="text" id="program" name="program" class="form-control" placeholder="e.g. M.Tech Computer Science & Engineering" required>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="year" class="form-label">Enrolment Year</label>
+                    <select id="year" name="year" class="form-control">
+                        <option value="1st Year">1st Year (Junior)</option>
+                        <option value="2nd Year" selected>2nd Year (Senior)</option>
+                        <option value="3rd Year">3rd Year (Undergraduate)</option>
+                        <option value="4th Year">4th Year (Undergraduate)</option>
+                        <option value="Doctoral Scholar">Ph.D. Doctoral Candidate</option>
+                    </select>
+                </div>
+                <div class="form-group col-quarter">
+                    <label for="gpa" class="form-label">Cumulative CGPA (10.00 Scale) *</label>
+                    <input type="number" step="0.01" min="0.0" max="10.0" id="gpa" name="gpa" class="form-control" placeholder="8.75" required>
+                    <small class="form-help">Scale: 0.00 to 10.00.</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="hostel_resident" class="form-label">Campus Residence & Accommodation Status</label>
+                <select id="hostel_resident" name="hostel_resident" class="form-control">
+                    <option value="Yes (Hostel Block A, Maidan Garhi Campus)" selected>Hostel Resident (Block A, Maidan Garhi Campus)</option>
+                    <option value="Yes (Hostel Block B, Maidan Garhi Campus)">Hostel Resident (Block B, Maidan Garhi Campus)</option>
+                    <option value="Day Scholar (Non-Resident)">Day Scholar (Off-Campus Local Residence)</option>
+                </select>
+            </div>
+
+            <div class="form-group affirm-box">
+                <label class="checkbox-container">
+                    <input type="checkbox" required>
+                    <span class="affirm-text">
+                        <strong>Solemn Undertaking:</strong> I hereby declare that the academic particulars furnished above, including my 10-point scale CGPA, are true and verifiable from official university registers. I agree to abide by the SAU Financial Aid Ordinances and Code of Student Conduct.
+                    </span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-gold btn-block btn-lg">Complete Registration & Create Student Dossier</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already registered with the Directorate? <a href="{{ url_for('login') }}" class="auth-link">Sign In to Your Dossier &rarr;</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
